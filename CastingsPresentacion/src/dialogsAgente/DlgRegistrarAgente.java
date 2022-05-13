@@ -12,6 +12,8 @@ import interfaces.IAgentesService;
 import javax.swing.JOptionPane;
 import negocio.AgentesService;
 import BOSFactory.BOSFactory;
+import interfaces.IPersistenciaFachada;
+import negocio.PersistenciaFachada;
 
 
 /**
@@ -22,7 +24,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
 
     Direccion direccion = new Direccion();
     Agente agente = new Agente();
-    IAgentesService agentes;
+    IPersistenciaFachada persistencia;
 
     DlgDireccion dlgDireccion;
 
@@ -30,7 +32,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
      * Creates new form DlgAgente
      */
     public DlgRegistrarAgente() {
-        agentes = BOSFactory.crearAgentesService();
+        persistencia = PersistenciaFachada.getInstance();
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -241,7 +243,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
 
             agente = new Agente(numEmpleados, nombre, telefono, RFC, RFC, direccion);
             try {
-                agentes.registrarAgente(agente);
+                persistencia.registrarAgente(agente);
                 JOptionPane.showMessageDialog(null, "Agente guardado con éxito");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error al guardar "+e.getMessage());

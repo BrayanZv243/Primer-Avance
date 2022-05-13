@@ -10,6 +10,8 @@ import Enums.Sexo;
 import entidades.Perfil;
 import Enums.EPerfil;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -24,12 +26,15 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
     /**
      * Creates new form LlenarPerfil
+     *
+     * @param perfiles
      */
-    public DlgLlenarPerfil() {
+    public DlgLlenarPerfil(ArrayList<Perfil> perfiles) {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
-        perfiles = new ArrayList<>();
+        this.perfiles = perfiles;
+        llenarTabla(perfiles);
     }
 
     /**
@@ -78,6 +83,12 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
         jLabel1.setText("Código:");
 
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Estado:");
 
         comboBoxEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Coahuila", "Colima", "Chiapas", "Chihuahua", "Durango", "CDMX", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas" }));
@@ -88,15 +99,51 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
         jLabel4.setText("Altura Min:");
 
+        txtAlturaMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAlturaMinKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Altura Max:");
+
+        txtAlturaMax.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAlturaMaxKeyTyped(evt);
+            }
+        });
 
         jLabel6.setText("Edad Min:");
 
+        txtEdadMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMinKeyTyped(evt);
+            }
+        });
+
         jLabel7.setText("Edad Max:");
+
+        txtEdadMax.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadMaxKeyTyped(evt);
+            }
+        });
 
         jLabel8.setText("Color de Pelo:");
 
+        txtColorPelo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtColorPeloKeyTyped(evt);
+            }
+        });
+
         jLabel9.setText("Color de Ojos:");
+
+        txtColorOjos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtColorOjosKeyTyped(evt);
+            }
+        });
 
         jLabel10.setText("Tipo de Perfil:");
 
@@ -281,11 +328,10 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
                             .addComponent(txtEdadMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtColorPelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnEliminar)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtColorPelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar)
+                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -324,11 +370,14 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+        if (!validar()) {
+            return;
+        }
+
         String codigo = txtCodigo.getText();
 
         Estado estado = toEnum(comboBoxEstados.getSelectedItem().toString());
@@ -336,11 +385,14 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         Sexo sexo = toSexo(comboBoxSexo.getSelectedItem().toString());
 
         String stringAlturaMin = txtAlturaMin.getText();
-        float alturaMin = Float.valueOf(stringAlturaMin);
 
+        DecimalFormat df = new DecimalFormat("#.00");
+
+        float alturaMin = Float.valueOf(stringAlturaMin);
+        df.format(alturaMin);
         String stringAlturaMax = txtAlturaMax.getText();
         float alturaMax = Float.valueOf(stringAlturaMax);
-
+        df.format(alturaMax);
         String stringEdadMin = txtEdadMin.getText();
         int edadMin = Integer.parseInt(stringEdadMin);
 
@@ -357,7 +409,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
         perfiles.add(perfil);
 
-        llenarTabla();
+        llenarTabla(perfiles);
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -367,19 +419,19 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         try {
             if (tblPerfil1.getSelectedRow() != -1) {
                 perfiles.remove(tblPerfil1.getSelectedRow());
-                
+
                 modelPerfil1.removeRow(tblPerfil1.getSelectedRow());
                 modelPerfil2.removeRow(tblPerfil1.getSelectedRow());
-            } else if(tblPerfil2.getSelectedRow() != -1){
+            } else if (tblPerfil2.getSelectedRow() != -1) {
                 perfiles.remove(tblPerfil2.getSelectedRow());
-                
+
                 modelPerfil1.removeRow(tblPerfil2.getSelectedRow());
                 modelPerfil2.removeRow(tblPerfil2.getSelectedRow());
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
+
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -387,7 +439,128 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void llenarTabla() {
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtCodigo.getText().trim().length() == 5) {
+            evt.consume();
+        }    }//GEN-LAST:event_txtCodigoKeyTyped
+
+    private void txtEdadMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMinKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtEdadMin.getText().trim().length() == 3) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtEdadMinKeyTyped
+
+    private void txtAlturaMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlturaMinKeyTyped
+        String alturaMin = txtAlturaMin.getText();
+
+        int k = evt.getKeyChar();
+
+        if (k >= 46 && k <= 57) {
+            if (k == 46) {
+                int tama = alturaMin.length();
+                for (int i = 0; i <= tama; i++) {
+                    if (alturaMin.contains(".")) {
+                        evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+                    }
+                }
+            }
+            if (k == 47) {
+                evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            }
+        } else {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txtAlturaMinKeyTyped
+
+    private void txtAlturaMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlturaMaxKeyTyped
+        String alturaMax = txtAlturaMax.getText();
+
+        int k = evt.getKeyChar();
+
+        if (k >= 46 && k <= 57) {
+            if (k == 46) {
+                int tama = alturaMax.length();
+                for (int i = 0; i <= tama; i++) {
+                    if (alturaMax.contains(".")) {
+                        evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+                    }
+                }
+            }
+            if (k == 47) {
+                evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            }
+        } else {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAlturaMaxKeyTyped
+
+    private void txtEdadMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMaxKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtEdadMax.getText().trim().length() == 10) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtEdadMaxKeyTyped
+
+    private void txtColorPeloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColorPeloKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+
+        if (!(minusculas || mayusculas)) {
+            evt.consume();
+        }
+
+        if (txtColorPelo.getText().trim().length() == 15) {
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_txtColorPeloKeyTyped
+
+    private void txtColorOjosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColorOjosKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+
+        if (!(minusculas || mayusculas)) {
+            evt.consume();
+        }
+
+        if (txtColorOjos.getText().trim().length() == 15) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtColorOjosKeyTyped
+
+    private void llenarTabla(ArrayList<Perfil> perfiles) {
 
         DefaultTableModel modelPerfil1 = (DefaultTableModel) tblPerfil1.getModel();
         DefaultTableModel modelPerfil2 = (DefaultTableModel) tblPerfil2.getModel();
@@ -568,6 +741,40 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         txtColorOjos.setText("");
         comboBoxPerfil.setSelectedIndex(0);
         comboBoxExperiencia.setSelectedIndex(0);
+    }
+
+    public boolean validar() {
+        if (txtAlturaMax.getText().equals("") || txtAlturaMin.getText().equals("") || txtCodigo.getText().equals("")
+                || txtColorOjos.getText().equals("") || txtColorPelo.getText().equals("") || txtEdadMax.getText().equals("")
+                || txtEdadMin.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Llene todos los campos requeridos!");
+            return false;
+        }
+        float alturaMin = 0;
+        float alturaMax = 0;
+        int edadMin = 0;
+        int edadMax = 0;
+        try {
+            alturaMin = Float.parseFloat(txtAlturaMin.getText());
+            alturaMax = Float.parseFloat(txtAlturaMax.getText());
+            edadMin = Integer.parseInt(txtEdadMin.getText());
+            edadMax = Integer.parseInt(txtEdadMax.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ingrese los debidos formatos!");
+            return false;
+        }
+
+        if (alturaMin > alturaMax || alturaMin <= 0 || alturaMax > 260 || alturaMax <= 0) {
+            JOptionPane.showMessageDialog(null, "Ingresar alturas validas!, llenela para guardar.");
+            return false;
+        }
+
+        if (edadMin > edadMax || edadMin <= 0 || edadMax > 120 || edadMax <= 0) {
+            JOptionPane.showMessageDialog(null, "Ingresar edades validas!, llenela para guardar.");
+            return false;
+        }
+
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

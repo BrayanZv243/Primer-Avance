@@ -12,11 +12,11 @@ import java.util.Date;
  */
 public class Prueba {
     Date fecha;
-    Direccion descripcion;
+    String descripcion;
     boolean aprobado;
     Sala sala;
 
-    public Prueba(Date fecha, Direccion descripcion, boolean aprobado, Sala sala) {
+    public Prueba(Date fecha, String descripcion, boolean aprobado, Sala sala) {
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.aprobado = aprobado;
@@ -34,11 +34,11 @@ public class Prueba {
         this.fecha = fecha;
     }
 
-    public Direccion getDescripcion() {
+    public String getDescripcion() {
         return descripcion;
     }
 
-    public void setDescripcion(Direccion descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
@@ -62,7 +62,6 @@ public class Prueba {
     public String toString() {
         return "Prueba{" + "fecha=" + fecha + ", descripcion=" + descripcion + ", aprobado=" + aprobado + ", sala=" + sala + '}';
     }
-    
-    
+
     
 }

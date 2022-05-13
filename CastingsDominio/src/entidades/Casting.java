@@ -21,30 +21,16 @@ public class Casting {
     ArrayList<Perfil> perfiles;
     Cliente cliente;
     Agente agente;
+    Fase fase;
 
     public Casting() {
     }
 
-    public Casting(boolean aprobado, float costo, String codigo, String nombre, 
-            String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, 
-            CastingOnline castingOnline, ArrayList<Perfil> perfiles, Cliente cliente, Agente agente) {
-        this.aprobado = aprobado;
-        this.costo = costo;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.fechaContrato = fechaContrato;
-        this.fechaHoraInicio = fechaHoraInicio;
-        this.fechaHoraFin = fechaHoraFin;
-        this.castingOnline = castingOnline;
-        this.perfiles = perfiles;
-        this.cliente = cliente;
-        this.agente = agente;
-    }
-
+    
+    
     public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion, 
             Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingPresencial castingPresencial, 
-            ArrayList<Perfil> perfiles, Cliente cliente, Agente agente) {
+            ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
         this.aprobado = aprobado;
         this.costo = costo;
         this.codigo = codigo;
@@ -57,10 +43,23 @@ public class Casting {
         this.perfiles = perfiles;
         this.cliente = cliente;
         this.agente = agente;
+        this.fase = fase;
     }
-    
-    public Casting(String codigo) {
+
+    public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline, ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+        this.aprobado = aprobado;
+        this.costo = costo;
         this.codigo = codigo;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fechaContrato = fechaContrato;
+        this.fechaHoraInicio = fechaHoraInicio;
+        this.fechaHoraFin = fechaHoraFin;
+        this.castingOnline = castingOnline;
+        this.perfiles = perfiles;
+        this.cliente = cliente;
+        this.agente = agente;
+        this.fase = fase;
     }
 
     public boolean isAprobado() {
@@ -167,8 +166,20 @@ public class Casting {
         this.agente = agente;
     }
 
+    public Fase getFase() {
+        return fase;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
+    }
+
     @Override
     public String toString() {
-        return "Casting{" + "aprobado=" + aprobado + ", costo=" + costo + ", codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fechaContrato=" + fechaContrato + ", fechaHoraInicio=" + fechaHoraInicio + ", fechaHoraFin=" + fechaHoraFin + ", castingOnline=" + castingOnline + ", castingPresencial=" + castingPresencial + ", perfiles=" + perfiles + ", cliente=" + cliente + ", agente=" + agente + '}';
+        return "Casting{" + "aprobado=" + aprobado + ", costo=" + costo + ", codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fechaContrato=" + fechaContrato + ", fechaHoraInicio=" + fechaHoraInicio + ", fechaHoraFin=" + fechaHoraFin + ", castingOnline=" + castingOnline + ", castingPresencial=" + castingPresencial + ", perfiles=" + perfiles + ", cliente=" + cliente + ", agente=" + agente + ", fase=" + fase + '}';
     }
+
+    
+    
+    
 }

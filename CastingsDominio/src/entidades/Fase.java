@@ -13,15 +13,13 @@ import java.util.Date;
 public class Fase {
     Date fechaInicio;
     Date fechaFin;
-    Casting codigoCasting;
-    Candidato codigoCantidato;
+    Candidato candidato;
     Prueba prueba;
 
-    public Fase(Date fechaInicio, Date fechaFin, Casting codigoCasting, Candidato codigoCantidato, Prueba prueba) {
+    public Fase(Date fechaInicio, Date fechaFin, Candidato candidato, Prueba prueba) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.codigoCasting = codigoCasting;
-        this.codigoCantidato = codigoCantidato;
+        this.candidato = candidato;
         this.prueba = prueba;
     }
 
@@ -44,20 +42,12 @@ public class Fase {
         this.fechaFin = fechaFin;
     }
 
-    public Casting getCodigoCasting() {
-        return codigoCasting;
+    public Candidato getCandidato() {
+        return candidato;
     }
 
-    public void setCodigoCasting(Casting codigoCasting) {
-        this.codigoCasting = codigoCasting;
-    }
-
-    public Candidato getCodigoCantidato() {
-        return codigoCantidato;
-    }
-
-    public void setCodigoCantidato(Candidato codigoCantidato) {
-        this.codigoCantidato = codigoCantidato;
+    public void setCandidato(Candidato candidato) {
+        this.candidato = candidato;
     }
 
     public Prueba getPrueba() {
@@ -70,8 +60,7 @@ public class Fase {
 
     @Override
     public String toString() {
-        return "Fase{" + "fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", codigoCasting=" + codigoCasting + ", codigoCantidato=" + codigoCantidato + ", prueba=" + prueba + '}';
+        return "Fase{" + "fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", candidato=" + candidato + ", prueba=" + prueba + '}';
     }
-    
     
 }

@@ -39,6 +39,7 @@ public class PersistenciaFachada implements IPersistenciaFachada {
         }
         return persistencia;
     }
+    
 
     @Override
     public boolean registrarCliente(Cliente cliente) {

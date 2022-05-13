@@ -4,8 +4,9 @@
  */
 package entidades;
 
-import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -13,23 +14,123 @@ import java.util.Date;
  */
 public class Adulto extends Candidato {
 
-    public Adulto(String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba) {
-        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfil, prueba);
+    public Adulto(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, 
+            Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado);
     }
 
-    public Adulto(String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
-        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfil, prueba, nombre, telefono, curp, rfc, direccion);
+    public Adulto(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, 
+            Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, 
+            String telefono, String curp, String rfc, Direccion direccion) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, 
+                nombre, telefono, curp, rfc, direccion);
     }
 
-    public Adulto() {
+    public Adulto(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, 
+            Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, 
+            String telefono, String curp, Direccion direccion) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, 
+                nombre, telefono, curp, direccion);
     }
 
-    public Adulto(String codigo) {
-        super(codigo);
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public Contacto getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(Contacto contacto) {
+        this.contacto = contacto;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public ImageIcon getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(ImageIcon fotografia) {
+        this.fotografia = fotografia;
+    }
+
+    public Representante getRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(Representante representante) {
+        this.representante = representante;
+    }
+
+    public ArrayList<Perfil> getPerfiles() {
+        return perfiles;
+    }
+
+    public void setPerfiles(ArrayList<Perfil> perfiles) {
+        this.perfiles = perfiles;
+    }
+
+    public boolean isAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCurp() {
+        return curp;
+    }
+
+    public void setCurp(String curp) {
+        this.curp = curp;
+    }
+
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     
- 
+
     
-    
+
 }

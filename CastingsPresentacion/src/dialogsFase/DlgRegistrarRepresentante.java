@@ -33,7 +33,6 @@ public class DlgRegistrarRepresentante extends javax.swing.JDialog {
         txtCurp.setText(representante.getCurp());
         txtRFC.setText(representante.getRfc());
         txtTelefono.setText(representante.getTelefono());
-
     }
 
     public Representante getRepresentante() {
@@ -67,9 +66,27 @@ public class DlgRegistrarRepresentante extends javax.swing.JDialog {
 
         jLabel1.setText("Nombre:");
 
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Teléfono:");
 
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Curp:");
+
+        txtCurp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCurpKeyTyped(evt);
+            }
+        });
 
         btnRegistrarDireccion.setText("Registrar Dirección");
         btnRegistrarDireccion.addActionListener(new java.awt.event.ActionListener() {
@@ -79,6 +96,12 @@ public class DlgRegistrarRepresentante extends javax.swing.JDialog {
         });
 
         jLabel4.setText("RFC:");
+
+        txtRFC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRFCKeyTyped(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -189,6 +212,70 @@ public class DlgRegistrarRepresentante extends javax.swing.JDialog {
         representante = new Representante(nombre, telefono, curp, rfc, direccion);
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+          int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+
+        if (!(minusculas || mayusculas || espacio)) {
+            evt.consume();
+        }
+
+        if (txtNombre.getText().trim().length() == 30) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+           int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtTelefono.getText().trim().length() == 10) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private void txtCurpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpKeyTyped
+          int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!(minusculas || mayusculas || espacio || numeros)) {
+            evt.consume();
+        }
+
+        if (txtCurp.getText().trim().length() == 18) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCurpKeyTyped
+
+    private void txtRFCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRFCKeyTyped
+         int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!(minusculas || mayusculas || espacio || numeros)) {
+            evt.consume();
+        }
+
+        if (txtCurp.getText().trim().length() == 13) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtRFCKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

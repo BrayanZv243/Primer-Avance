@@ -6,7 +6,6 @@
 package dialogsCasting;
 
 import dlgcompartidos.DlgDireccion;
-import entidades.Casting;
 import entidades.CastingOnline;
 import entidades.CastingPresencial;
 import entidades.Direccion;
@@ -22,26 +21,42 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
 
     Direccion direccion = new Direccion();
     DlgDireccion dlgDireccion;
-    CastingPresencial castingPresencial;
-    CastingOnline castingOnline;
+    static CastingPresencial castingPresencial;
+    static CastingOnline castingOnline;
 
     /**
      * Creates new form SeleccionarModalidad
      */
-    public DlgSeleccionarModalidad() {
-        initComponents();
-        setLocationRelativeTo(null);
-        spinnerNumPersonasOnline.setEnabled(false);
-        txtOnlineEnlace.setEnabled(false);
-
+    public DlgSeleccionarModalidad(CastingPresencial cp, CastingOnline co) {
         SpinnerNumberModel modeloSpinner = new SpinnerNumberModel();
         modeloSpinner.setMaximum(Integer.MAX_VALUE);
         modeloSpinner.setMinimum(1);
+        
+        initComponents();
+        spinnerNumPersonasOnline.setEnabled(false);
+        txtOnlineEnlace.setEnabled(false);
 
         spinnerNumPersonasOnline.setModel(modeloSpinner);
-        spinnerNumPersonasOnline.setValue(1);
         spinnerNumPersonasPresencial.setModel(modeloSpinner);
         spinnerNumPersonasPresencial.setValue(1);
+        spinnerNumPersonasOnline.setValue(1);
+        setLocationRelativeTo(null);
+        
+        
+        this.castingPresencial = cp;
+        this.castingOnline = co;
+
+        if (cp.getSala() != null) {
+            spinnerNumPersonasPresencial.setValue(cp.getNumPersonas());
+            direccion = cp.getSala().getDireccion();
+            txtNombreSala.setText(cp.getSala().getNombre());
+            txtDescripcionSala.setText(cp.getSala().getDescripcion());
+        } else if (co != null) {
+            spinnerNumPersonasOnline.setValue(co.getAsistente());
+            txtOnlineEnlace.setText(co.getEnlace());
+        }
+
+        
         setVisible(true);
 
     }
@@ -93,6 +108,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
 
         jLabel2.setText("Número de Personas:");
 
+        spinnerNumPersonasPresencial.setValue(1);
         spinnerNumPersonasPresencial.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -131,17 +147,12 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
                             .addComponent(jLabel5)
                             .addComponent(jLabel4)
                             .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNombreSala, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblPresencial)
-                                    .addComponent(spinnerNumPersonasPresencial, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombreSala, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPresencial)
+                            .addComponent(spinnerNumPersonasPresencial, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(118, 118, 118)
                         .addComponent(btnRegistrarDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -177,6 +188,8 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
 
         jLabel15.setText("Número de Personas:");
 
+        spinnerNumPersonasOnline.setValue(1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -186,9 +199,10 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel15)
                     .addComponent(jLabel14))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 28, Short.MAX_VALUE)
+                        .addGap(0, 10, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(spinnerNumPersonasOnline, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,7 +211,6 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
                                 .addComponent(lblOnline)
                                 .addGap(187, 187, 187))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addComponent(txtOnlineEnlace)
                         .addContainerGap())))
         );
@@ -319,7 +332,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-
+        
         dlgDireccion = new DlgDireccion(direccion);
 
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
@@ -336,24 +349,30 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
             int numPersonas = (int) spinnerNumPersonasPresencial.getValue();
             String descripcion = txtDescripcionSala.getText();
             String nombre = txtNombreSala.getText();
-            direccion = dlgDireccion.getDireccion();
             Sala sala = new Sala(nombre, direccion, descripcion);
             castingPresencial = new CastingPresencial(numPersonas, sala);
-            
+
         } else {
             int numPersonas = (int) spinnerNumPersonasOnline.getValue();
             String enlace = txtOnlineEnlace.getText();
             castingOnline = new CastingOnline(enlace, numPersonas);
-            
+
         }
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    public CastingPresencial getCastingPresencial() {
+    public static CastingPresencial getCastingPresencial() {
+        if (castingPresencial == null) {
+            return new CastingPresencial();
+        }
         return castingPresencial;
+
     }
 
-    public CastingOnline getCastingOnline() {
+    public static CastingOnline getCastingOnline() {
+        if (castingOnline == null) {
+            return new CastingOnline();
+        }
         return castingOnline;
     }
 

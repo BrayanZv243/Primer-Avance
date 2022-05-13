@@ -5,18 +5,57 @@
  */
 package dialogsFase;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
+import dlgcompartidos.DlgDireccion;
+import entidades.Direccion;
+import entidades.Prueba;
+import entidades.Sala;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
 public class DlgRegistrarPrueba extends javax.swing.JDialog {
 
+    static Prueba prueba;
+    Direccion direccion = new Direccion();
+
     /**
      * Creates new form DlgRegistrarPrueba
+     *
+     * @param prueba
      */
-    public DlgRegistrarPrueba(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public DlgRegistrarPrueba(Prueba prueba) {
         initComponents();
+        setVisible(true);
+        setLocationRelativeTo(null);
+        this.prueba = prueba;
+
+        if (prueba.getFecha() != null) {
+            LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(prueba.getFecha()));
+            dateFecha.setDate(localDate);
+        }
+        aprobadoCheckBox.setSelected(prueba.isAprobado());
+        if (prueba.getSala() != null) {
+            txtNombreSala.setText(prueba.getSala().getNombre());
+            txtDescripcionSala.setText(prueba.getSala().getDescripcion());
+            direccion = prueba.getSala().getDireccion();
+        } else {
+            this.prueba = new Prueba();
+            this.prueba.setSala(new Sala());
+            this.prueba.getSala().setDireccion(new Direccion());
+        }
+        
+        
+
     }
 
     /**
@@ -31,9 +70,8 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         dateFecha = new com.github.lgooddatepicker.components.DatePicker();
         jLabel2 = new javax.swing.JLabel();
-        btnRegistrarDireccion = new javax.swing.JButton();
         aprobadoCheckBox = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        btnRegistrarDireccion = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtNombreSala = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -44,14 +82,18 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registrar Prueba");
 
         jLabel1.setText("Fecha:");
 
-        btnRegistrarDireccion.setText("Registrar Direccion Prueba");
-
         aprobadoCheckBox.setText("Aprobatorio");
 
-        jButton1.setText("Registrar Dirección Sala");
+        btnRegistrarDireccion.setText("Registrar Dirección Sala");
+        btnRegistrarDireccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarDireccionActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Nombre Sala:");
 
@@ -62,42 +104,60 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         jScrollPane1.setViewportView(txtDescripcionSala);
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addGap(35, 35, 35)
+                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(btnCancelar)
+                .addGap(35, 35, 35))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnRegistrarDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dateFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(aprobadoCheckBox)
-                            .addComponent(dateFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnRegistrarDireccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
                             .addComponent(jScrollPane1)
-                            .addComponent(txtNombreSala))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                        .addComponent(btnCancelar)
-                        .addGap(31, 31, 31))))
+                            .addComponent(txtNombreSala))))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,72 +168,126 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRegistrarDireccion)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(16, 16, 16)
-                .addComponent(aprobadoCheckBox)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNombreSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpiar)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar))
-                .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(btnRegistrarDireccion)
+                        .addGap(18, 18, 18)
+                        .addComponent(aprobadoCheckBox)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNombreSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(68, 86, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnLimpiar)
+                            .addComponent(btnCancelar))
+                        .addGap(30, 30, 30))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistrarPrueba.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistrarPrueba.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistrarPrueba.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgRegistrarPrueba.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgRegistrarPrueba dialog = new DlgRegistrarPrueba(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (!validacion()) {
+            return;
+        }
+        Date fecha = null;
+        try {
+            fecha = toDate(null, dateFecha);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ingrese una Fecha Válida!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        prueba.setFecha(fecha);
+        prueba.setAprobado(aprobadoCheckBox.isSelected());
+        prueba.getSala().setNombre(txtNombreSala.getText());
+        prueba.getSala().setDescripcion(txtDescripcionSala.getText());
+        prueba.getSala().setDireccion(direccion);
+        
+        
+        dispose();
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    public static Prueba getPrueba() {
+        if (prueba == null) {
+            return new Prueba();
+        }
+        return prueba;
     }
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
+        new DlgDireccion(direccion);
+    }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
+
+    private void limpiar() {
+        dateFecha.setText("");
+        aprobadoCheckBox.setSelected(false);
+        txtNombreSala.setText("");
+        txtDescripcionSala.setText("");
+    }
+
+    private boolean validacion() {
+        if (dateFecha.getText().equals("") || txtDescripcionSala.getText().equals("")
+                || txtNombreSala.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Campos vacíos o inválidos, verifiquelos e intentelo de nuevo",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (direccion.getCalle() == null || direccion.getCodigoPostal() == null
+                || direccion.getColonia() == null || direccion.getEntreCalles() == null
+                || direccion.getNumExterior() == null || direccion.getNumInterior() == null
+                || direccion.getReferencia() == null) {
+            JOptionPane.showMessageDialog(null, "Llene la dirección y datos de la sala.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        if (dateTimePicker != null) {
+            String date = dateTimePicker.getDatePicker().getDate().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"));
+            String hour = dateTimePicker.timePicker.getTime().toString();
+
+            String dateS = date + " " + hour;
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+            Date fecha = null;
+            try {
+                fecha = formatter.parse(dateS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return fecha;
+        } else if (datePicker != null) {
+            Date fecha = Date.from(datePicker.getDate().atStartOfDay(defaultZoneId).toInstant());
+            return fecha;
+        }
+        return null;
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox aprobadoCheckBox;
@@ -182,7 +296,6 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnRegistrarDireccion;
     private com.github.lgooddatepicker.components.DatePicker dateFecha;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

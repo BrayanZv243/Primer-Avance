@@ -11,11 +11,10 @@ import dlgcompartidos.DlgDireccion;
 import entidades.Cliente;
 import entidades.Contacto;
 import entidades.Direccion;
-import interfaces.IClientesService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import BOSFactory.BOSFactory;
+import entidades.Persona;
 import interfaces.IPersistenciaFachada;
 import negocio.PersistenciaFachada;
 
@@ -315,7 +314,7 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
             String telefono = txtTelefono.getText();
             String correo = txtCorreo.getText();
             Empresa empresa = toEmpresa(comboBoxTipoEmpresa.getSelectedItem().toString());
-            contacto = dlgContacto.getContacto();
+            contacto = (Contacto) dlgContacto.getContacto();
 
             Cliente cliente = new Cliente(nombre, telefono, codigo, correo, empresa, contacto, direccion);
             if(persistencia.registrarCliente(cliente)) JOptionPane.showMessageDialog(null, "Cliente guardado con éxito");

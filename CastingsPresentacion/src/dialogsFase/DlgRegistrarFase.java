@@ -5,17 +5,53 @@
  */
 package dialogsFase;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
+import entidades.Candidato;
+import entidades.Fase;
+import entidades.Prueba;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
 public class DlgRegistrarFase extends javax.swing.JDialog {
 
-    /**
-     * Creates new form DlgRegistrarFase
-     */
-    public DlgRegistrarFase() {
+    static Fase fase;
+    Date fechaInicio;
+    Date fechaFin;
+    Prueba prueba;
+    Candidato candidato;
+
+    public DlgRegistrarFase(Fase fase) {
         initComponents();
+        this.fase = fase;
+        if (fase.getFechaFin() != null && fase.getFechaInicio() != null) {
+            LocalDate localDateInicio = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaInicio()));
+            LocalDate localDateFin = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaFin()));
+            datePicker1.setDate(localDateInicio);
+            datePicker2.setDate(localDateFin);
+        }
+
+        if (fase.getCandidato() != null) candidato = fase.getCandidato();
+        else candidato = new Candidato();
+        
+        if (fase.getPrueba() != null) prueba = fase.getPrueba();
+        else prueba = new Prueba();
+            
+        if(fase.getFechaInicio() != null){
+            fechaInicio = fase.getFechaInicio();
+            fechaFin = fase.getFechaFin();
+        }
+        
+
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -33,21 +69,18 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
         datePicker2 = new com.github.lgooddatepicker.components.DatePicker();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         btnPrueba = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnRegistrarCandidato = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registrar Fase");
 
         jLabel1.setText("Fecha de Inicio");
 
         jLabel2.setText("Fecha de Fin");
-
-        jLabel4.setText("Candidato:");
 
         btnPrueba.setText("Registrar Prueba");
         btnPrueba.addActionListener(new java.awt.event.ActionListener() {
@@ -57,8 +90,18 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
         btnCancelar.setPreferredSize(new java.awt.Dimension(90, 32));
@@ -68,10 +111,10 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setText("Registrar Candidato");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarCandidato.setText("Registrar Candidato");
+        btnRegistrarCandidato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegistrarCandidatoActionPerformed(evt);
             }
         });
 
@@ -82,7 +125,6 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
@@ -93,20 +135,19 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(121, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
+                        .addGap(57, 57, 57)
                         .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))))
+                        .addGap(46, 46, 46))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnPrueba, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
+                    .addComponent(btnRegistrarCandidato, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
                 .addGap(162, 162, 162))
         );
         layout.setVerticalGroup(
@@ -120,15 +161,11 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(31, 31, 31)
+                .addComponent(btnRegistrarCandidato)
+                .addGap(18, 18, 18)
                 .addComponent(btnPrueba)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnGuardar)
@@ -140,30 +177,114 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
-        // TODO add your handling code here:
+        prueba = DlgRegistrarPrueba.getPrueba();
+        new DlgRegistrarPrueba(prueba);
+
     }//GEN-LAST:event_btnPruebaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new DlgRegistrarCandidato();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnRegistrarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCandidatoActionPerformed
+        candidato = DlgRegistrarCandidato.getCandidato();
+        new DlgRegistrarCandidato(candidato);
 
+    }//GEN-LAST:event_btnRegistrarCandidatoActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (!validacion()) {
+            return;
+        }
+        fase = new Fase(fechaInicio, fechaFin, candidato, prueba);
+        dispose();
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    public static Fase getFase(){
+        if(fase == null) return new Fase();
+        return fase;
+    }
     
+    private boolean validacion() {
+        candidato = DlgRegistrarCandidato.getCandidato();
+        prueba = DlgRegistrarPrueba.getPrueba();
+        try {
+            if (datePicker1.getText().equals("") || datePicker2.getText().equals("")
+                    || candidato.getCodigo() == null || 
+                    prueba.getFecha() == null) {
+                JOptionPane.showMessageDialog(null, "Llene los campos correspondientes e intentelo de nuevo!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Llene la prueba y el candidato para guardar la fase!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }   
+
+        try {
+            fechaInicio = toDate(null, datePicker1);
+            fechaFin = toDate(null, datePicker2);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ingrese una Fecha Válida!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (fechaInicio.getTime() > fechaFin.getTime()) {
+            JOptionPane.showMessageDialog(null, "Fecha de inicio inválida!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+
+    }
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void limpiar() {
+        datePicker1.setText("");
+        datePicker1.setText("");
+    }
+
+    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        if (dateTimePicker != null) {
+            String date = dateTimePicker.getDatePicker().getDate().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"));
+            String hour = dateTimePicker.timePicker.getTime().toString();
+
+            String dateS = date + " " + hour;
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+            Date fecha = null;
+            try {
+                fecha = formatter.parse(dateS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return fecha;
+        } else if (datePicker != null) {
+            Date fecha = Date.from(datePicker.getDate().atStartOfDay(defaultZoneId).toInstant());
+            return fecha;
+        }
+        return null;
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnPrueba;
+    private javax.swing.JButton btnRegistrarCandidato;
     private com.github.lgooddatepicker.components.DatePicker datePicker1;
     private com.github.lgooddatepicker.components.DatePicker datePicker2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 }

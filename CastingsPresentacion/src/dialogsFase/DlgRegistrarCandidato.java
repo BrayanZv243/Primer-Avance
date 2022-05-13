@@ -5,20 +5,31 @@
  */
 package dialogsFase;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
 import dlgcompartidos.DlgDireccion;
 import dlgcompartidos.DlgLlenarPerfil;
 import dlgcompartidos.DlgRegistrarContacto;
+import entidades.Adulto;
 import entidades.Candidato;
 import entidades.Contacto;
 import entidades.Direccion;
+import entidades.Niño;
 import entidades.Perfil;
 import entidades.Representante;
 import java.awt.Image;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -27,28 +38,75 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
-    Candidato candidato;
-    
+    ImageIcon image;
+    static Candidato candidato;
+
     Direccion direccion = new Direccion();
     DlgDireccion dlgDireccion;
-    
+
     DlgRegistrarContacto dlgContacto;
     Contacto contacto = new Contacto();
-    
+
     DlgRegistrarContacto dlgRepresentante;
-    Contacto representante = new Contacto();
-    
+    Representante representante = new Representante();
+
     DlgLlenarPerfil dlgPerfil;
     ArrayList<Perfil> perfiles;
-    
+
     /**
      * Creates new form DlgRegistrarCandidato
+     *
+     * @param candidato
      */
-    public DlgRegistrarCandidato() {
+    public DlgRegistrarCandidato(Candidato candidato) {
         initComponents();
         perfiles = new ArrayList<>();
         setLocationRelativeTo(null);
         setVisible(true);
+        this.candidato = candidato;
+        txtCodigo.setText(candidato.getCodigo());
+        txtCurp.setText(candidato.getCurp());
+        txtNombre.setText(candidato.getNombre());
+        txtRFC.setText(candidato.getRfc());
+        txtTelefono.setText(candidato.getTelefono());
+
+        if (candidato.getFechaNacimiento() != null) {
+            LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(candidato.getFechaNacimiento()));
+            dateFechaNacimiento.setDate(localDate);
+        }
+        
+        if(candidato.getFotografia() != null){
+            Icon icono = new ImageIcon(candidato.getFotografia().getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+            lblFoto.setIcon(icono);
+            image = candidato.getFotografia();
+        }
+        
+
+        aprobadoCheckBox.setSelected(candidato.isAprobado());
+        if (candidato.getDireccion() != null) {
+            direccion = candidato.getDireccion();
+        } else {
+            direccion = new Direccion();
+        }
+
+        if (candidato.getPerfiles() != null) {
+            perfiles = candidato.getPerfiles();
+        } else {
+            perfiles = new ArrayList<>();
+        }
+
+        if (candidato.getRepresentante() != null) {
+            representante = candidato.getRepresentante();
+        } else {
+            representante = new Representante();
+        }
+
+        if (candidato.getContacto() != null) {
+            contacto = candidato.getContacto();
+        } else {
+            contacto = new Contacto();
+        }
+
     }
 
     /**
@@ -87,14 +145,39 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registrar Candidato");
 
         jLabel1.setText("Nombre:");
 
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Teléfono:");
+
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Curp:");
 
+        txtCurp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCurpKeyTyped(evt);
+            }
+        });
+
         lblRFC.setText("RFC:");
+
+        txtRFC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRFCKeyTyped(evt);
+            }
+        });
 
         btnRegistrarDireccion.setText("Registrar Dirección");
         btnRegistrarDireccion.addActionListener(new java.awt.event.ActionListener() {
@@ -104,6 +187,12 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         });
 
         jLabel5.setText("Código:");
+
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
 
         btnRegistrarContacto.setText("Registrar Contacto");
         btnRegistrarContacto.addActionListener(new java.awt.event.ActionListener() {
@@ -255,7 +344,8 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
                     .addComponent(jLabel7)
                     .addComponent(comboBoxCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -274,24 +364,24 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
                             .addComponent(txtRFC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRegistrarDireccion)
-                        .addGap(8, 8, 8)
-                        .addComponent(btnRegistrarContacto))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegistrarContacto)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(btnEscogerFotografia))
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(btnRegistrarRepresentante))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegistrarRepresentante, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)))
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aprobadoCheckBox)
                     .addComponent(btnRegistrarPerfil))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnGuardar)
@@ -304,25 +394,24 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
     private void btnEscogerFotografiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscogerFotografiaActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filtroImagen=new FileNameExtensionFilter("JPG, PNG","jpg","png");
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG", "jpg", "png");
         fileChooser.setFileFilter(filtroImagen);
-        
-        
+
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            
+
             File selectedFile = fileChooser.getSelectedFile();
-            ImageIcon image = new ImageIcon(selectedFile.getAbsolutePath());
+            image = new ImageIcon(selectedFile.getAbsolutePath());
             Icon icono = new ImageIcon(image.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
             lblFoto.setIcon(icono);
             this.repaint();
-            
+
         }
     }//GEN-LAST:event_btnEscogerFotografiaActionPerformed
 
     private void comboBoxCandidatoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxCandidatoItemStateChanged
-        if(comboBoxCandidato.getSelectedIndex() == 0){
+        if (comboBoxCandidato.getSelectedIndex() == 0) {
             lblRFC.setEnabled(true);
             txtRFC.setEnabled(true);
         } else {
@@ -332,7 +421,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
     }//GEN-LAST:event_comboBoxCandidatoItemStateChanged
 
     private void btnRegistrarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil();
+        dlgPerfil = new DlgLlenarPerfil(perfiles);
         perfiles = dlgPerfil.getPerfil();
     }//GEN-LAST:event_btnRegistrarPerfilActionPerformed
 
@@ -355,27 +444,192 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
     private void btnRegistrarContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarContactoActionPerformed
         dlgContacto = new DlgRegistrarContacto(contacto);
-        
-        
     }//GEN-LAST:event_btnRegistrarContactoActionPerformed
 
     private void btnRegistrarRepresentanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRepresentanteActionPerformed
         dlgRepresentante = new DlgRegistrarContacto(representante);
-        
+
     }//GEN-LAST:event_btnRegistrarRepresentanteActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        System.out.println(direccion);
-        System.out.println("----");
-        System.out.println(contacto);
-        System.out.println("----");
-        System.out.println(representante);
-        System.out.println("----");
-        System.out.println(perfiles);
-        
+        if (!validacion()) {
+            return;
+        }
+
+        if (comboBoxCandidato.getSelectedIndex() == 0) {
+            String nombre = txtNombre.getText();
+            String curp = txtCurp.getText();
+            String rfc = txtRFC.getText();
+            String telefono = txtTelefono.getText();
+            String codigo = txtCodigo.getText();
+            boolean aprobado = aprobadoCheckBox.isSelected();
+            Date fechaNacimiento = toDate(null, dateFechaNacimiento);
+
+            Adulto adulto = new Adulto(codigo, contacto, fechaNacimiento,
+                    image, representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
+            candidato = adulto;
+            dispose();
+        } else {
+            String nombre = txtNombre.getText();
+            String curp = txtCurp.getText();
+            String telefono = txtTelefono.getText();
+            String codigo = txtCodigo.getText();
+            boolean aprobado = aprobadoCheckBox.isSelected();
+            Date fechaNacimiento = toDate(null, dateFechaNacimiento);
+
+            Niño niño = new Niño(codigo, contacto, fechaNacimiento,
+                    image, representante, perfiles, aprobado, nombre, telefono, curp, direccion);
+            candidato = niño;
+            dispose();
+        }
+
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void limpiar(){
+    public static Candidato getCandidato() {
+        if (candidato == null) {
+            return new Candidato();
+        }
+        return candidato;
+    }
+
+    public boolean validacion() {
+        if (direccion.getCalle() == null || direccion.getCodigoPostal() == null
+                || direccion.getColonia() == null || direccion.getEntreCalles() == null
+                || direccion.getNumExterior() == null || direccion.getNumInterior() == null
+                || direccion.getReferencia() == null) {
+            JOptionPane.showMessageDialog(null, "Dirección incompleta, llenela para guardar.");
+            return false;
+        }
+
+        if (contacto.getCurp() == null || contacto.getDireccion() == null || contacto.getNombre() == null
+                || contacto.getRfc() == null || contacto.getTelefono() == null) {
+            JOptionPane.showMessageDialog(null, "Contacto incompleta, llenela para guardar.");
+            return false;
+        }
+
+        if (representante.getCurp() == null || representante.getDireccion() == null || representante.getNombre() == null
+                || representante.getRfc() == null || representante.getTelefono() == null) {
+            JOptionPane.showMessageDialog(null, "Representante incompleto, llenela para guardar.");
+            return false;
+        }
+        if (perfiles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Llene al menos un perfil!");
+            return false;
+        }
+
+        if (image == null) {
+            JOptionPane.showMessageDialog(null, "Seleccione una Foto!");
+            return false;
+        }
+
+        return true;
+    }
+
+    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        if (dateTimePicker != null) {
+            String date = dateTimePicker.getDatePicker().getDate().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"));
+            String hour = dateTimePicker.timePicker.getTime().toString();
+
+            String dateS = date + " " + hour;
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+            Date fecha = null;
+            try {
+                fecha = formatter.parse(dateS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return fecha;
+        } else if (datePicker != null) {
+            Date fecha = Date.from(datePicker.getDate().atStartOfDay(defaultZoneId).toInstant());
+            return fecha;
+        }
+        return null;
+
+    }
+
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+
+        if (!(minusculas || mayusculas || espacio)) {
+            evt.consume();
+        }
+
+        if (txtNombre.getText().trim().length() == 30) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtTelefono.getText().trim().length() == 10) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private void txtCurpKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!(minusculas || mayusculas || espacio || numeros)) {
+            evt.consume();
+        }
+
+        if (txtCurp.getText().trim().length() == 18) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCurpKeyTyped
+
+    private void txtRFCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRFCKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean espacio = key == 32;
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!(minusculas || mayusculas || espacio || numeros)) {
+            evt.consume();
+        }
+
+        if (txtRFC.getText().trim().length() == 13) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtRFCKeyTyped
+
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        int key = evt.getKeyChar();
+
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtCodigo.getText().trim().length() == 5) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCodigoKeyTyped
+
+    private void limpiar() {
         comboBoxCandidato.setSelectedIndex(0);
         txtNombre.setText("");
         txtTelefono.setText("");

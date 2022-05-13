@@ -4,8 +4,9 @@
  */
 package entidades;
 
-import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -15,40 +16,47 @@ public class Candidato extends Persona{
     String codigo;
     Contacto contacto;
     Date fechaNacimiento;
-    Image fotografia;
+    ImageIcon fotografia;
     Representante representante;
-    Perfil perfil;
-    Prueba prueba;
+    ArrayList<Perfil> perfiles;
+    boolean aprobado;
 
-    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba) {
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
         this.codigo = codigo;
         this.contacto = contacto;
         this.fechaNacimiento = fechaNacimiento;
         this.fotografia = fotografia;
         this.representante = representante;
-        this.perfil = perfil;
-        this.prueba = prueba;
+        this.perfiles = perfiles;
+        this.aprobado = aprobado;
     }
 
-    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
         super(nombre, telefono, curp, rfc, direccion);
         this.codigo = codigo;
         this.contacto = contacto;
         this.fechaNacimiento = fechaNacimiento;
         this.fotografia = fotografia;
         this.representante = representante;
-        this.perfil = perfil;
-        this.prueba = prueba;
+        this.perfiles = perfiles;
+        this.aprobado = aprobado;
     }
 
-    
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
+        super(nombre, telefono, curp, direccion);
+        this.codigo = codigo;
+        this.contacto = contacto;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fotografia = fotografia;
+        this.representante = representante;
+        this.perfiles = perfiles;
+        this.aprobado = aprobado;
+    }
 
     public Candidato() {
     }
-
-    public Candidato(String codigo) {
-        this.codigo = codigo;
-    }
+    
+    
 
     public String getCodigo() {
         return codigo;
@@ -74,11 +82,11 @@ public class Candidato extends Persona{
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Image getFotografia() {
+    public ImageIcon getFotografia() {
         return fotografia;
     }
 
-    public void setFotografia(Image fotografia) {
+    public void setFotografia(ImageIcon fotografia) {
         this.fotografia = fotografia;
     }
 
@@ -90,26 +98,68 @@ public class Candidato extends Persona{
         this.representante = representante;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public ArrayList<Perfil> getPerfiles() {
+        return perfiles;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setPerfiles(ArrayList<Perfil> perfiles) {
+        this.perfiles = perfiles;
     }
 
-    public Prueba getPrueba() {
-        return prueba;
+    public boolean isAprobado() {
+        return aprobado;
     }
 
-    public void setPrueba(Prueba prueba) {
-        this.prueba = prueba;
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCurp() {
+        return curp;
+    }
+
+    public void setCurp(String curp) {
+        this.curp = curp;
+    }
+
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     @Override
     public String toString() {
-        return "Candidato{" + "codigo=" + codigo + ", contacto=" + contacto + ", fechaNacimiento=" + fechaNacimiento + ", fotografia=" + fotografia + ", representante=" + representante + ", perfil=" + perfil + ", prueba=" + prueba + '}';
+        return "Candidato{" + "codigo=" + codigo + ", contacto=" + contacto + ", fechaNacimiento=" + fechaNacimiento + ", fotografia=" + fotografia + ", representante=" + representante + ", perfiles=" + perfiles + ", aprobado=" + aprobado + '}';
     }
+
+    
     
     
 }

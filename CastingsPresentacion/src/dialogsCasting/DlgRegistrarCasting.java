@@ -6,7 +6,6 @@
 package dialogsCasting;
 
 import dlgcompartidos.DlgLlenarPerfil;
-import BOSFactory.BOSFactory;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import dialogsFase.DlgRegistrarFase;
@@ -15,12 +14,9 @@ import entidades.Casting;
 import entidades.CastingOnline;
 import entidades.CastingPresencial;
 import entidades.Cliente;
+import entidades.Fase;
 import entidades.Perfil;
-import interfaces.ICastingsDAO;
-import interfaces.ICastingsService;
-import interfaces.IClientesDAO;
-import interfaces.IClientesService;
-import java.sql.Timestamp;
+import interfaces.IPersistenciaFachada;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -29,8 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import negocio.ClientesService;
-import persistencia.ClientesDAO;
+import negocio.PersistenciaFachada;
 
 /**
  *
@@ -42,7 +37,13 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     ArrayList<Perfil> perfiles = new ArrayList<>();
     DefaultComboBoxModel listaClientes;
     DefaultComboBoxModel listaAgentes;
-    ICastingsService castingsService;
+    IPersistenciaFachada persistenciaFachada;
+
+    Date fechaContrato;
+    Date fechaHoraInicio;
+    Date fechaHoraFin;
+
+    Fase fase = new Fase();
 
     DlgLlenarPerfil dlgPerfil;
     DlgSeleccionarModalidad dlgModalidad;
@@ -54,7 +55,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
      * @param listaAgentes Lista de agentes.
      */
     public DlgRegistrarCasting(DefaultComboBoxModel listaClientes, DefaultComboBoxModel listaAgentes) {
-        castingsService = BOSFactory.crearCastingsService();
+        persistenciaFachada = PersistenciaFachada.getInstance();
         this.listaAgentes = listaAgentes;
         this.listaClientes = listaClientes;
         initComponents();
@@ -97,7 +98,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnComprobar = new javax.swing.JButton();
         btnRegistrarFase = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -180,13 +180,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             }
         });
 
-        btnComprobar.setText("comprobar");
-        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnComprobarActionPerformed(evt);
-            }
-        });
-
         btnRegistrarFase.setText("Registrar Fase");
         btnRegistrarFase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,30 +194,18 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(84, 84, 84)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(84, 84, 84)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(6, 6, 6))
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel7)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(btnComprobar)))
+                                .addComponent(jLabel1)
+                                .addGap(6, 6, 6))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,11 +218,18 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 33, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnRegistrarFase, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnLlenarPerfil, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnSeleccionarModalidad)))))
+                                    .addComponent(btnSeleccionarModalidad, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                                    .addComponent(btnRegistrarFase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnLlenarPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(121, 121, 121)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -254,39 +242,32 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(19, 19, 19)
                                 .addComponent(comboBoxAgentes, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(btnLlenarPerfil)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSeleccionarModalidad))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(btnComprobar)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addComponent(btnLlenarPerfil)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSeleccionarModalidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRegistrarFase)))
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
@@ -327,45 +308,34 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSeleccionarModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarModalidadActionPerformed
-        dlgModalidad = new DlgSeleccionarModalidad();
+        CastingPresencial cp = DlgSeleccionarModalidad.getCastingPresencial();
+        CastingOnline co = DlgSeleccionarModalidad.getCastingOnline();
+        if(cp != null){
+            dlgModalidad = new DlgSeleccionarModalidad(cp,null);
+        } else if(co != null){
+            dlgModalidad = new DlgSeleccionarModalidad(null,co);
+        } else {
+            new DlgSeleccionarModalidad(cp,co);
+        }
+        
+        
 
     }//GEN-LAST:event_btnSeleccionarModalidadActionPerformed
 
     private void btnLlenarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLlenarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil();
+        dlgPerfil = new DlgLlenarPerfil(perfiles);
         perfiles = dlgPerfil.getPerfil();
     }//GEN-LAST:event_btnLlenarPerfilActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if(!validar()) return;
+        
         String codigo = txtCodigo.getText();
         String nombre = txtNombre.getText();
         String descripcion = txtDescripcion.getText();
 
-        Date fechaContrato = toDate(null, dateContrato);
-
         String stringCosto = txtCosto.getText();
         float costo = Float.valueOf(stringCosto);
-
-        Date fechaHoraInicio = toDate(dateTimeInicio, null);
-        Date fechaHoraFin = toDate(dateTimeFin, null);
-
-        if (fechaContrato.getTime() > fechaHoraInicio.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha contrato inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        if (fechaHoraInicio.getTime() > fechaHoraFin.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha de inicio inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        if (fechaHoraFin.getTime() > fechaContrato.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha de fin inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
 
         boolean aprobado = (comboBoxAprobado.getSelectedItem().toString().equals("Aprobado"));
         Cliente cliente = (Cliente) comboBoxClientes.getSelectedItem();
@@ -377,9 +347,9 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         if (cp != null) {
             Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
                     fechaContrato, fechaHoraInicio, fechaHoraFin, cp, perfiles,
-                    cliente, agente);
+                    cliente, agente, fase);
 
-            castingsService.registrarCasting(casting);
+            persistenciaFachada.registrarCasting(casting);
             JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
                     "Error", JOptionPane.INFORMATION_MESSAGE);
 
@@ -387,9 +357,9 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         } else if (co != null) {
             Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
                     fechaContrato, fechaHoraInicio, fechaHoraFin, co, perfiles,
-                    cliente, agente);
+                    cliente, agente, fase);
 
-            castingsService.registrarCasting(casting);
+            persistenciaFachada.registrarCasting(casting);
             JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
                     "Error", JOptionPane.INFORMATION_MESSAGE);
 
@@ -414,11 +384,64 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             return false;
         }
 
+        if (perfiles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Llene el perfil del casting!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        fase = DlgRegistrarFase.getFase();
+        if (fase.getFechaInicio() == null) {
+            JOptionPane.showMessageDialog(null, "Llene la fase del casting!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
         try {
             float costo = Float.parseFloat(txtCosto.getText());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Campo de Costo inválido, verifiquelo e intentelo de nuevo.",
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            fechaContrato = toDate(null, dateContrato);
+            fechaHoraInicio = toDate(dateTimeInicio, null);
+            fechaHoraFin = toDate(dateTimeFin, null);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Fecha(s) inválida, ingrese otra(s).",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if (fechaContrato.getTime() > fechaHoraInicio.getTime()) {
+            JOptionPane.showMessageDialog(null, "Fecha contrato inválida, ingrese otra.",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if (fechaHoraInicio.getTime() >= fechaHoraFin.getTime()) {
+            JOptionPane.showMessageDialog(null, "Fecha de inicio inválida, ingrese otra.",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if (fechaHoraFin.getTime() < fechaContrato.getTime()) {
+            JOptionPane.showMessageDialog(null, "Fecha de fin inválida, ingrese otra.",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        if (dateContrato.getText().equals("") || dateTimeInicio.getDatePicker().getText().equals("")
+                || dateTimeFin.getDatePicker().getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese las fechas",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        if (dateTimeInicio.getTimePicker().getText().equals("")
+                || dateTimeFin.getTimePicker().getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese las horas",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
 
@@ -471,52 +494,9 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtNombreKeyTyped
 
-    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
-        if(dateContrato.getText().equals("") || dateTimeInicio.getDatePicker().getText().equals("")
-                || dateTimeFin.getDatePicker().getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Ingrese las fechas",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        if(dateTimeInicio.getTimePicker().getText().equals("") || 
-                dateTimeFin.getTimePicker().getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Ingrese las horas",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        Date fechaContrato = toDate(null, dateContrato);
-        Date fechaHoraInicio = toDate(dateTimeInicio, null);
-        Date fechaHoraFin = toDate(dateTimeFin, null);
-        
-        
-        
-        if (fechaContrato.getTime() > fechaHoraInicio.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha contrato inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        if (fechaHoraInicio.getTime() >= fechaHoraFin.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha de inicio inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        if (fechaHoraFin.getTime() < fechaContrato.getTime()) {
-            JOptionPane.showMessageDialog(null, "Fecha de fin inválida, ingrese otra.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        
-
-        JOptionPane.showMessageDialog(null, "VALIDO",
-                "VALIDO", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_btnComprobarActionPerformed
-
     private void btnRegistrarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarFaseActionPerformed
-        new DlgRegistrarFase();
+        fase = DlgRegistrarFase.getFase();
+        new DlgRegistrarFase(fase);
     }//GEN-LAST:event_btnRegistrarFaseActionPerformed
 
     private void limpiar() {
@@ -535,7 +515,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
 
     }
 
-    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) {
+    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
 
         if (dateTimePicker != null) {
             String date = dateTimePicker.getDatePicker().getDate().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"));
@@ -561,7 +541,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnLlenarPerfil;

@@ -9,7 +9,7 @@ import dialogsFase.DlgRegistrarCandidato;
 import dlgcompartidos.DlgDireccion;
 import entidades.Contacto;
 import entidades.Direccion;
-import entidades.Representante;
+import entidades.Persona;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 public class DlgRegistrarContacto extends javax.swing.JDialog {
 
     Direccion direccion = new Direccion();
-    Contacto contacto;
+    Persona persona;
     Contacto contactoRepresentante;
     DlgDireccion dlgDireccion;
 
@@ -30,17 +30,17 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
      *
      * @param contacto
      */
-    public DlgRegistrarContacto(Contacto contacto) {
+    public DlgRegistrarContacto(Persona persona) {
 
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
-        this.contacto = contacto;
-        txtCurp.setText(contacto.getCurp());
-        txtNombre.setText(contacto.getNombre());
-        txtRFC.setText(contacto.getRfc());
-        txtTelefono.setText(contacto.getTelefono());
-        this.contacto.setDireccion(contacto.getDireccion());
+        this.persona = persona;
+        txtCurp.setText(persona.getCurp());
+        txtNombre.setText(persona.getNombre());
+        txtRFC.setText(persona.getRfc());
+        txtTelefono.setText(persona.getTelefono());
+        this.persona.setDireccion(persona.getDireccion());
 
     }
 
@@ -199,10 +199,10 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        if (contacto.getDireccion() == null) {
+        if (persona.getDireccion() == null) {
             new DlgDireccion(direccion);
         } else {
-            direccion = contacto.getDireccion();
+            direccion = persona.getDireccion();
             new DlgDireccion(direccion);
         }
 
@@ -214,26 +214,24 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
 
         if (validacion()) {
             guardarContacto();
-            
+
             String nombre = txtNombre.getText();
             String telefono = txtTelefono.getText();
             String curp = txtCurp.getText().toUpperCase();
             String rfc = txtRFC.getText().toUpperCase();
 
-            contacto = new Contacto(nombre, telefono, curp, rfc, direccion);
-            
+            persona = new Contacto(nombre, telefono, curp, rfc, direccion);
+
             dispose();
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    
-
     public void guardarContacto() {
-        contacto.setCurp(txtCurp.getText());
-        contacto.setDireccion(direccion);
-        contacto.setNombre(txtNombre.getText());
-        contacto.setRfc(txtRFC.getText());
-        contacto.setTelefono(txtTelefono.getText());
+        persona.setCurp(txtCurp.getText());
+        persona.setDireccion(direccion);
+        persona.setNombre(txtNombre.getText());
+        persona.setRfc(txtRFC.getText());
+        persona.setTelefono(txtTelefono.getText());
 
     }
 
@@ -317,9 +315,9 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         txtTelefono.setText("");
     }
 
-    public Contacto getContacto() {
-        if (contacto != null) {
-            return contacto;
+    public Persona getContacto() {
+        if (persona != null) {
+            return persona;
         }
         return new Contacto();
     }

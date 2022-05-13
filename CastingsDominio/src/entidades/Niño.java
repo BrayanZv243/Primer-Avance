@@ -4,44 +4,26 @@
  */
 package entidades;
 
-import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author lv1822
  */
-public class Niño extends Candidato{
-    Contacto contactoTutor;
+public class Niño extends Candidato {
 
-    public Niño() {
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado);
     }
 
-    public Niño(Contacto contactoTutor, String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba) {
-        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfil, prueba);
-        this.contactoTutor = contactoTutor;
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
     }
 
-    public Niño(Contacto contactoTutor, String codigo, Contacto contacto, Date fechaNacimiento, Image fotografia, Representante representante, Perfil perfil, Prueba prueba, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
-        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfil, prueba, nombre, telefono, curp, rfc, direccion);
-        this.contactoTutor = contactoTutor;
-    }
-
-    public Niño(Contacto contactoTutor) {
-        this.contactoTutor = contactoTutor;
-    }
-
-    public Niño(Contacto contactoTutor, String codigo) {
-        super(codigo);
-        this.contactoTutor = contactoTutor;
-    }
-
-    public Contacto getContactoTutor() {
-        return contactoTutor;
-    }
-
-    public void setContactoTutor(Contacto contactoTutor) {
-        this.contactoTutor = contactoTutor;
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
+        super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, nombre, telefono, curp, direccion);
     }
 
     public String getCodigo() {
@@ -68,11 +50,11 @@ public class Niño extends Candidato{
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Image getFotografia() {
+    public ImageIcon getFotografia() {
         return fotografia;
     }
 
-    public void setFotografia(Image fotografia) {
+    public void setFotografia(ImageIcon fotografia) {
         this.fotografia = fotografia;
     }
 
@@ -84,20 +66,20 @@ public class Niño extends Candidato{
         this.representante = representante;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public ArrayList<Perfil> getPerfiles() {
+        return perfiles;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setPerfiles(ArrayList<Perfil> perfiles) {
+        this.perfiles = perfiles;
     }
 
-    public Prueba getPrueba() {
-        return prueba;
+    public boolean isAprobado() {
+        return aprobado;
     }
 
-    public void setPrueba(Prueba prueba) {
-        this.prueba = prueba;
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
     }
 
     public String getNombre() {
@@ -140,12 +122,9 @@ public class Niño extends Candidato{
         this.direccion = direccion;
     }
 
-    @Override
-    public String toString() {
-        return "Ni\u00f1o{" + "contactoTutor=" + contactoTutor + '}';
-    }
+    
 
     
-    
+   
     
 }

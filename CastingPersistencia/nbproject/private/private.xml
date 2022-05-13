@@ -5,8 +5,10 @@
         <group>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/factory/DAOSFactory.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/persistencia/ConexionBD.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/interfaces/IAgentesDAO.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/persistencia/CastingsDAO.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/persistencia/AgentesDAO.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/interfaces/IClientesDAO.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingPersistencia/src/persistencia/ClientesDAO.java</file>
         </group>
     </open-files>
