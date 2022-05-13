@@ -16,7 +16,7 @@ public class ConexionBD implements IConexionBD {
     private static final String HOST = "localhost";
     private static final int PUERTO = 27017;
     private static final String BASE_DATOS = "casting";
-    MongoDatabase baseDatos;
+    static MongoDatabase baseDatos;
 
     @Override
     public MongoDatabase crearConexion() {
@@ -47,6 +47,7 @@ public class ConexionBD implements IConexionBD {
         }
     }
 
+    
     @Override
     public MongoDatabase obtenerConexion() {
         if(baseDatos != null) return baseDatos;

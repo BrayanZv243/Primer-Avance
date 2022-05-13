@@ -14,15 +14,15 @@ import javax.swing.ImageIcon;
  */
 public class Niño extends Candidato {
 
-    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
         super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado);
     }
 
-    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
         super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
     }
 
-    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
+    public Niño(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
         super(codigo, contacto, fechaNacimiento, fotografia, representante, perfiles, aprobado, nombre, telefono, curp, direccion);
     }
 
@@ -50,11 +50,11 @@ public class Niño extends Candidato {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public ImageIcon getFotografia() {
+    public byte[] getFotografia() {
         return fotografia;
     }
 
-    public void setFotografia(ImageIcon fotografia) {
+    public void setFotografia(byte[] fotografia) {
         this.fotografia = fotografia;
     }
 

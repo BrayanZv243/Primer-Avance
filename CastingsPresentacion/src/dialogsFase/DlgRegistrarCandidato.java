@@ -18,7 +18,11 @@ import entidades.Niño;
 import entidades.Perfil;
 import entidades.Representante;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,6 +30,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -74,13 +81,27 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(candidato.getFechaNacimiento()));
             dateFechaNacimiento.setDate(localDate);
         }
-        
-        if(candidato.getFotografia() != null){
-            Icon icono = new ImageIcon(candidato.getFotografia().getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+
+        if (candidato.getFotografia() != null) {
+            ByteArrayInputStream bis = new ByteArrayInputStream(candidato.getFotografia());
+            BufferedImage bImage2 = null;
+            try {
+                bImage2 = ImageIO.read(bis);
+            } catch (IOException ex) {
+
+            }
+            try {
+                ImageIO.write(bImage2, "jpg", new File("output.jpg"));
+            } catch (IOException ex) {
+
+            }
+            ImageIcon img = new ImageIcon(bImage2);
+            lblFoto.setIcon(new ImageIcon(bImage2));
+
+            Icon icono = new ImageIcon(img.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
             lblFoto.setIcon(icono);
-            image = candidato.getFotografia();
+            image = (ImageIcon) icono;
         }
-        
 
         aprobadoCheckBox.setSelected(candidato.isAprobado());
         if (candidato.getDireccion() != null) {
@@ -392,6 +413,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    File imageFile;
     private void btnEscogerFotografiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscogerFotografiaActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG, PNG", "jpg", "png");
@@ -402,6 +424,8 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         if (result == JFileChooser.APPROVE_OPTION) {
 
             File selectedFile = fileChooser.getSelectedFile();
+            imageFile = new File(selectedFile.getAbsolutePath());
+
             image = new ImageIcon(selectedFile.getAbsolutePath());
             Icon icono = new ImageIcon(image.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
             lblFoto.setIcon(icono);
@@ -455,6 +479,22 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         if (!validacion()) {
             return;
         }
+        if (imageFile != null) {
+            BufferedImage bImage = null;
+            try {
+                bImage = ImageIO.read(imageFile);
+            } catch (IOException ex) {
+
+            }
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try {
+                ImageIO.write(bImage, "jpg", bos);
+            } catch (IOException ex) {
+
+            }
+            byte[] data = bos.toByteArray();
+            candidato.setFotografia(data);
+        }
 
         if (comboBoxCandidato.getSelectedIndex() == 0) {
             String nombre = txtNombre.getText();
@@ -466,7 +506,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             Date fechaNacimiento = toDate(null, dateFechaNacimiento);
 
             Adulto adulto = new Adulto(codigo, contacto, fechaNacimiento,
-                    image, representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
+                    candidato.getFotografia(), representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
             candidato = adulto;
             dispose();
         } else {
@@ -478,7 +518,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             Date fechaNacimiento = toDate(null, dateFechaNacimiento);
 
             Niño niño = new Niño(codigo, contacto, fechaNacimiento,
-                    image, representante, perfiles, aprobado, nombre, telefono, curp, direccion);
+                    candidato.getFotografia(), representante, perfiles, aprobado, nombre, telefono, curp, direccion);
             candidato = niño;
             dispose();
         }

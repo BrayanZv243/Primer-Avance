@@ -16,12 +16,12 @@ public class Candidato extends Persona{
     String codigo;
     Contacto contacto;
     Date fechaNacimiento;
-    ImageIcon fotografia;
+    byte[] fotografia;
     Representante representante;
     ArrayList<Perfil> perfiles;
     boolean aprobado;
 
-    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado) {
         this.codigo = codigo;
         this.contacto = contacto;
         this.fechaNacimiento = fechaNacimiento;
@@ -31,7 +31,7 @@ public class Candidato extends Persona{
         this.aprobado = aprobado;
     }
 
-    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, String rfc, Direccion direccion) {
         super(nombre, telefono, curp, rfc, direccion);
         this.codigo = codigo;
         this.contacto = contacto;
@@ -42,7 +42,7 @@ public class Candidato extends Persona{
         this.aprobado = aprobado;
     }
 
-    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, ImageIcon fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
+    public Candidato(String codigo, Contacto contacto, Date fechaNacimiento, byte[] fotografia, Representante representante, ArrayList<Perfil> perfiles, boolean aprobado, String nombre, String telefono, String curp, Direccion direccion) {
         super(nombre, telefono, curp, direccion);
         this.codigo = codigo;
         this.contacto = contacto;
@@ -82,11 +82,11 @@ public class Candidato extends Persona{
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public ImageIcon getFotografia() {
+    public byte[] getFotografia() {
         return fotografia;
     }
 
-    public void setFotografia(ImageIcon fotografia) {
+    public void setFotografia(byte[] fotografia) {
         this.fotografia = fotografia;
     }
 
