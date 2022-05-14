@@ -21,7 +21,7 @@ import persistencia.ConexionBD;
  */
 public class DAOSFactory {
     
-    private static final IConexionBD conexionBD = new ConexionBD();
+    private static final IConexionBD conexionBD = ConexionBD.getInstance();
     
     public static IClientesDAO crearClientesDAO(){
         return new ClientesDAO(conexionBD);

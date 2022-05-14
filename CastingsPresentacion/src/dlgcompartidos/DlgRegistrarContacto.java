@@ -28,6 +28,7 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
     /**
      * Creates new form DlgRegistrarContacto
      *
+     * @param persona
      * @param contacto
      */
     public DlgRegistrarContacto(Persona persona) {
@@ -36,14 +37,17 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.persona = persona;
+        llenarCampos();
+    }
+
+    
+    private void llenarCampos(){
         txtCurp.setText(persona.getCurp());
         txtNombre.setText(persona.getNombre());
         txtRFC.setText(persona.getRfc());
         txtTelefono.setText(persona.getTelefono());
         this.persona.setDireccion(persona.getDireccion());
-
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

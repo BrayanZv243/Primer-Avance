@@ -30,8 +30,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -71,6 +69,12 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.candidato = candidato;
+
+        llenarCampos();
+    }
+
+    private void llenarCampos() {
+
         txtCodigo.setText(candidato.getCodigo());
         txtCurp.setText(candidato.getCurp());
         txtNombre.setText(candidato.getNombre());
@@ -127,7 +131,6 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         } else {
             contacto = new Contacto();
         }
-
     }
 
     /**

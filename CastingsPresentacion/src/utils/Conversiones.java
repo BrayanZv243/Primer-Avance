@@ -8,6 +8,8 @@ import javax.swing.DefaultComboBoxModel;
 
 public class Conversiones {
 
+    static Conversiones conversiones;
+    
     /**
      * Genera un objeto de tipo DefaultComboBoxModel a partir de una lista de
      * clientes.
@@ -46,5 +48,10 @@ public class Conversiones {
             return defaultComboBoxModel;
         }
         return null;
+    }
+    
+    public static Conversiones getInstance(){
+        if(conversiones == null) return new Conversiones();
+        return conversiones;
     }
 }

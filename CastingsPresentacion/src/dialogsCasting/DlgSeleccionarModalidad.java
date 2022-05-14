@@ -28,37 +28,40 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
      * Creates new form SeleccionarModalidad
      */
     public DlgSeleccionarModalidad(CastingPresencial cp, CastingOnline co) {
-        SpinnerNumberModel modeloSpinner = new SpinnerNumberModel();
-        modeloSpinner.setMaximum(Integer.MAX_VALUE);
-        modeloSpinner.setMinimum(1);
-        
         initComponents();
+        this.castingPresencial = cp;
+        this.castingOnline = co;
+        llenarCampos();
+        setLocationRelativeTo(null);
+        setVisible(true);
+
+    }
+
+    private void llenarCampos() {
+        SpinnerNumberModel modeloSpinnerPresencial = new SpinnerNumberModel();
+        SpinnerNumberModel modeloSpinnerOnline = new SpinnerNumberModel();
+        modeloSpinnerPresencial.setMaximum(Integer.MAX_VALUE);
+        modeloSpinnerPresencial.setMinimum(1);
+        modeloSpinnerOnline.setMaximum(Integer.MAX_VALUE);
+        modeloSpinnerOnline.setMinimum(1);
+
         spinnerNumPersonasOnline.setEnabled(false);
         txtOnlineEnlace.setEnabled(false);
 
-        spinnerNumPersonasOnline.setModel(modeloSpinner);
-        spinnerNumPersonasPresencial.setModel(modeloSpinner);
+        spinnerNumPersonasOnline.setModel(modeloSpinnerOnline);
+        spinnerNumPersonasPresencial.setModel(modeloSpinnerPresencial);
         spinnerNumPersonasPresencial.setValue(1);
         spinnerNumPersonasOnline.setValue(1);
-        setLocationRelativeTo(null);
-        
-        
-        this.castingPresencial = cp;
-        this.castingOnline = co;
 
-        if (cp.getSala() != null) {
-            spinnerNumPersonasPresencial.setValue(cp.getNumPersonas());
-            direccion = cp.getSala().getDireccion();
-            txtNombreSala.setText(cp.getSala().getNombre());
-            txtDescripcionSala.setText(cp.getSala().getDescripcion());
-        } else if (co != null) {
-            spinnerNumPersonasOnline.setValue(co.getAsistente());
-            txtOnlineEnlace.setText(co.getEnlace());
+        if (castingPresencial.getSala() != null) {
+            spinnerNumPersonasPresencial.setValue(castingPresencial.getNumPersonas());
+            direccion = castingPresencial.getSala().getDireccion();
+            txtNombreSala.setText(castingPresencial.getSala().getNombre());
+            txtDescripcionSala.setText(castingPresencial.getSala().getDescripcion());
+        } else if (castingOnline != null) {
+            spinnerNumPersonasOnline.setValue(castingOnline.getAsistente());
+            txtOnlineEnlace.setText(castingOnline.getEnlace());
         }
-
-        
-        setVisible(true);
-
     }
 
     /**
@@ -108,7 +111,6 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
 
         jLabel2.setText("Número de Personas:");
 
-        spinnerNumPersonasPresencial.setValue(1);
         spinnerNumPersonasPresencial.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -187,8 +189,6 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
         jLabel14.setText("Enlace:");
 
         jLabel15.setText("Número de Personas:");
-
-        spinnerNumPersonasOnline.setValue(1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -332,7 +332,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        
+
         dlgDireccion = new DlgDireccion(direccion);
 
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed

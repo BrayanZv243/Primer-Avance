@@ -33,6 +33,12 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
     public DlgRegistrarFase(Fase fase) {
         initComponents();
         this.fase = fase;
+        llenarCampos();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void llenarCampos() {
         if (fase.getFechaFin() != null && fase.getFechaInicio() != null) {
             LocalDate localDateInicio = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaInicio()));
             LocalDate localDateFin = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaFin()));
@@ -40,20 +46,22 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             datePicker2.setDate(localDateFin);
         }
 
-        if (fase.getCandidato() != null) candidato = fase.getCandidato();
-        else candidato = new Candidato();
-        
-        if (fase.getPrueba() != null) prueba = fase.getPrueba();
-        else prueba = new Prueba();
-            
-        if(fase.getFechaInicio() != null){
+        if (fase.getCandidato() != null) {
+            candidato = fase.getCandidato();
+        } else {
+            candidato = new Candidato();
+        }
+
+        if (fase.getPrueba() != null) {
+            prueba = fase.getPrueba();
+        } else {
+            prueba = new Prueba();
+        }
+
+        if (fase.getFechaInicio() != null) {
             fechaInicio = fase.getFechaInicio();
             fechaFin = fase.getFechaFin();
         }
-        
-
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     /**
@@ -201,18 +209,20 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    public static Fase getFase(){
-        if(fase == null) return new Fase();
+    public static Fase getFase() {
+        if (fase == null) {
+            return new Fase();
+        }
         return fase;
     }
-    
+
     private boolean validacion() {
         candidato = DlgRegistrarCandidato.getCandidato();
         prueba = DlgRegistrarPrueba.getPrueba();
         try {
             if (datePicker1.getText().equals("") || datePicker2.getText().equals("")
-                    || candidato.getCodigo() == null || 
-                    prueba.getFecha() == null) {
+                    || candidato.getCodigo() == null
+                    || prueba.getFecha() == null) {
                 JOptionPane.showMessageDialog(null, "Llene los campos correspondientes e intentelo de nuevo!",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
@@ -221,7 +231,7 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Llene la prueba y el candidato para guardar la fase!",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
-        }   
+        }
 
         try {
             fechaInicio = toDate(null, datePicker1);

@@ -38,7 +38,10 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         setVisible(true);
         setLocationRelativeTo(null);
         this.prueba = prueba;
+        llenarCampos();
+    }
 
+    private void llenarCampos(){
         if (prueba.getFecha() != null) {
             LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(prueba.getFecha()));
             dateFecha.setDate(localDate);
@@ -53,11 +56,8 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
             this.prueba.setSala(new Sala());
             this.prueba.getSala().setDireccion(new Direccion());
         }
-        
-        
-
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

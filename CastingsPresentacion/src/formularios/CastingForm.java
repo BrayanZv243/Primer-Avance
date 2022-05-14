@@ -28,7 +28,7 @@ public class CastingForm extends javax.swing.JFrame {
     
     public CastingForm() {
         persistencia = PersistenciaFachada.getInstance();
-        conversiones = new Conversiones();
+        conversiones = Conversiones.getInstance();
         initComponents();
         setLocationRelativeTo(null);
     }

@@ -27,6 +27,10 @@ public class DlgDireccion extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.direccion = direccion;
+        llenarCampos();
+    }
+    
+    private void llenarCampos(){
         txtCalle.setText(direccion.getCalle());
         txtCP.setText(direccion.getCodigoPostal());
         txtColonia.setText(direccion.getColonia());
@@ -34,7 +38,6 @@ public class DlgDireccion extends javax.swing.JDialog {
         txtNumExterior.setText(direccion.getNumExterior());
         txtNumInterior.setText(direccion.getNumInterior());
         txtReferencias.setText(direccion.getReferencia());
-
     }
 
     public Direccion getDireccion() {
