@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Casting {
+
     boolean aprobado;
     float costo;
     String codigo;
@@ -26,11 +27,9 @@ public class Casting {
     public Casting() {
     }
 
-    
-    
-    public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion, 
-            Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingPresencial castingPresencial, 
-            ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+    public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion,
+            Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingPresencial castingPresencial,
+            Cliente cliente, Agente agente, Fase fase) {
         this.aprobado = aprobado;
         this.costo = costo;
         this.codigo = codigo;
@@ -40,13 +39,14 @@ public class Casting {
         this.fechaHoraInicio = fechaHoraInicio;
         this.fechaHoraFin = fechaHoraFin;
         this.castingPresencial = castingPresencial;
-        this.perfiles = perfiles;
         this.cliente = cliente;
         this.agente = agente;
         this.fase = fase;
     }
 
-    public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline, ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+    public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion,
+            Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline,
+            Cliente cliente, Agente agente, Fase fase) {
         this.aprobado = aprobado;
         this.costo = costo;
         this.codigo = codigo;
@@ -56,7 +56,6 @@ public class Casting {
         this.fechaHoraInicio = fechaHoraInicio;
         this.fechaHoraFin = fechaHoraFin;
         this.castingOnline = castingOnline;
-        this.perfiles = perfiles;
         this.cliente = cliente;
         this.agente = agente;
         this.fase = fase;
@@ -176,10 +175,12 @@ public class Casting {
 
     @Override
     public String toString() {
-        return "Casting{" + "aprobado=" + aprobado + ", costo=" + costo + ", codigo=" + codigo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fechaContrato=" + fechaContrato + ", fechaHoraInicio=" + fechaHoraInicio + ", fechaHoraFin=" + fechaHoraFin + ", castingOnline=" + castingOnline + ", castingPresencial=" + castingPresencial + ", perfiles=" + perfiles + ", cliente=" + cliente + ", agente=" + agente + ", fase=" + fase + '}';
+        String toString = "Nombre Cliente: " + nombre + "  -Nombre Agente: " + agente.getNombre();
+        String resultado = castingPresencial != null ? "  -Tipo: Presencial" : "  -Tipo: Online";
+
+        toString += resultado;
+
+        return toString;
     }
 
-    
-    
-    
 }

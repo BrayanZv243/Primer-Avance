@@ -9,12 +9,14 @@ import Enums.Estado;
 import Enums.Sexo;
 import entidades.Perfil;
 import Enums.EPerfil;
+import entidades.Casting;
+import interfaces.IPersistenciaFachada;
 import java.awt.HeadlessException;
-import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import negocio.PersistenciaFachada;
 
 /**
  *
@@ -23,18 +25,33 @@ import javax.swing.table.DefaultTableModel;
 public class DlgLlenarPerfil extends javax.swing.JDialog {
 
     ArrayList<Perfil> perfiles;
+    DefaultComboBoxModel listaCastings;
+    IPersistenciaFachada persistenciaFachada;
 
     /**
      * Creates new form LlenarPerfil
      *
      * @param perfiles
+     * @param castings
      */
-    public DlgLlenarPerfil(ArrayList<Perfil> perfiles) {
+    public DlgLlenarPerfil(ArrayList<Perfil> perfiles, DefaultComboBoxModel listaCastings) {
+        this.listaCastings = listaCastings;
+        this.perfiles = perfiles;
+        persistenciaFachada = PersistenciaFachada.getInstance();
         initComponents();
+        if (listaCastings != null) {
+            lblCasting.setVisible(true);
+            comboBoxCastings.setVisible(true);
+            comboBoxCastings.setModel(listaCastings);
+        } else {
+            lblCasting.setVisible(false);
+            comboBoxCastings.setVisible(false);
+
+        }
         setLocationRelativeTo(null);
         setVisible(true);
-        this.perfiles = perfiles;
         llenarTabla(perfiles);
+
     }
 
     /**
@@ -53,13 +70,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         comboBoxSexo = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        txtAlturaMin = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtAlturaMax = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtEdadMin = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtEdadMax = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtColorPelo = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -77,6 +88,10 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         tblPerfil1 = new javax.swing.JTable();
         btnInsertar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        comboBoxRangoAltura = new javax.swing.JComboBox<>();
+        comboBoxRangoEdad = new javax.swing.JComboBox<>();
+        lblCasting = new javax.swing.JLabel();
+        comboBoxCastings = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Llenar Perfil");
@@ -96,38 +111,15 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         jLabel3.setText("Sexo:");
 
         comboBoxSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
-
-        jLabel4.setText("Altura Min:");
-
-        txtAlturaMin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtAlturaMinKeyTyped(evt);
+        comboBoxSexo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSexoActionPerformed(evt);
             }
         });
 
-        jLabel5.setText("Altura Max:");
+        jLabel4.setText("Rango Altura:");
 
-        txtAlturaMax.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtAlturaMaxKeyTyped(evt);
-            }
-        });
-
-        jLabel6.setText("Edad Min:");
-
-        txtEdadMin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtEdadMinKeyTyped(evt);
-            }
-        });
-
-        jLabel7.setText("Edad Max:");
-
-        txtEdadMax.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtEdadMaxKeyTyped(evt);
-            }
-        });
+        jLabel6.setText("Rango Edad:");
 
         jLabel8.setText("Color de Pelo:");
 
@@ -179,11 +171,11 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Edad Max", "Color Pelo", "Color Ojos", "Tipo Perfil", "Experiencia"
+                "R. Edad", "Tipo Perfil", "Color Pelo", "Color Ojos", "Experiencia"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -204,14 +196,14 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Codigo", "Estado", "Sexo", "Altura Min", "Altura Max", "Edad Min"
+                "Codigo", "Estado", "Sexo", "R. Altura"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -238,6 +230,12 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             }
         });
 
+        comboBoxRangoAltura.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Menos de 1.50", "1.50 - 1.70", "1.70 - 1.90", "Mayor a 1.90" }));
+
+        comboBoxRangoEdad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0-15", "5 – 18", "18 - 25", "25 – 35", "35 – 45", "45 – 60", "Mayor a 60" }));
+
+        lblCasting.setText("Casting:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,22 +243,23 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addGap(83, 83, 83)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel11)))
+                            .addComponent(jLabel1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(btnLimpiar)))
+                        .addComponent(btnLimpiar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -268,30 +267,33 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
                         .addGap(65, 65, 65)
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboBoxExperiencia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtCodigo)
-                            .addComponent(comboBoxEstados, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(comboBoxSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtAlturaMin)
-                            .addComponent(txtAlturaMax)
-                            .addComponent(txtEdadMin)
-                            .addComponent(txtEdadMax)
-                            .addComponent(txtColorPelo)
-                            .addComponent(txtColorOjos)
-                            .addComponent(comboBoxPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(15, 15, 15))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(340, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(16, 16, 16)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCodigo)
+                                    .addComponent(comboBoxEstados, 0, 159, Short.MAX_VALUE)
+                                    .addComponent(comboBoxSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboBoxRangoAltura, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboBoxRangoEdad, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboBoxExperiencia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboBoxPerfil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtColorPelo)
+                                    .addComponent(txtColorOjos))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(192, 192, 192)
+                                .addComponent(lblCasting)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboBoxCastings, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 16, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,61 +303,56 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(comboBoxEstados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtAlturaMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(comboBoxEstados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(txtAlturaMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txtEdadMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(txtEdadMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtColorPelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar)
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtColorOjos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(comboBoxPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxExperiencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addGap(18, 18, 18)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(comboBoxRangoAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addGap(24, 24, 24)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(comboBoxRangoEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(comboBoxSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(comboBoxExperiencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(comboBoxPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10)
+                                    .addComponent(lblCasting)
+                                    .addComponent(comboBoxCastings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnEliminar))
+                                .addGap(21, 21, 21)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(txtColorPelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(24, 24, 24)
+                                .addComponent(txtColorOjos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(145, 145, 145)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnLimpiar)
                     .addComponent(btnCancelar)
                     .addComponent(btnInsertar))
-                .addContainerGap(10, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(48, 48, 48)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(393, Short.MAX_VALUE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -370,6 +367,25 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (perfiles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Inserte al menos un perfil para guardar!",
+                    "Perfil", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (listaCastings != null) {
+            Casting casting = (Casting) comboBoxCastings.getSelectedItem();
+            casting.setPerfiles(perfiles);
+            if (persistenciaFachada.actualizarCasting(casting)) {
+                JOptionPane.showMessageDialog(null, "Perfil guardado con éxito al casting",
+                        "Perfil", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar el perfil",
+                        "Perfil", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        }
+
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -384,28 +400,16 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
 
         Sexo sexo = toSexo(comboBoxSexo.getSelectedItem().toString());
 
-        String stringAlturaMin = txtAlturaMin.getText();
-
-        DecimalFormat df = new DecimalFormat("#.00");
-
-        float alturaMin = Float.valueOf(stringAlturaMin);
-        df.format(alturaMin);
-        String stringAlturaMax = txtAlturaMax.getText();
-        float alturaMax = Float.valueOf(stringAlturaMax);
-        df.format(alturaMax);
-        String stringEdadMin = txtEdadMin.getText();
-        int edadMin = Integer.parseInt(stringEdadMin);
-
-        String stringEdadMax = txtEdadMax.getText();
-        int edadMax = Integer.parseInt(stringEdadMax);
+        String rangoAltura = comboBoxRangoAltura.getSelectedItem().toString();
+        String rangoEdad = comboBoxRangoEdad.getSelectedItem().toString();
 
         String colorCabello = txtColorPelo.getText();
         String colorOjos = txtColorOjos.getText();
         EPerfil tipoPerfil = toPerfil(comboBoxPerfil.getSelectedItem().toString());
         boolean experiencia = (comboBoxExperiencia.getSelectedItem().toString().equals("Si"));
 
-        Perfil perfil = new Perfil(codigo, estado, sexo, alturaMax,
-                alturaMin, edadMin, edadMax, colorCabello, colorOjos, experiencia, tipoPerfil);
+        Perfil perfil = new Perfil(codigo, estado, sexo, rangoAltura,
+                rangoEdad, colorCabello, colorOjos, experiencia, tipoPerfil);
 
         perfiles.add(perfil);
 
@@ -452,81 +456,6 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             evt.consume();
         }    }//GEN-LAST:event_txtCodigoKeyTyped
 
-    private void txtEdadMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMinKeyTyped
-        int key = evt.getKeyChar();
-
-        boolean numeros = key >= 48 && key <= 57;
-
-        if (!numeros) {
-            evt.consume();
-        }
-
-        if (txtEdadMin.getText().trim().length() == 3) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtEdadMinKeyTyped
-
-    private void txtAlturaMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlturaMinKeyTyped
-        String alturaMin = txtAlturaMin.getText();
-
-        int k = evt.getKeyChar();
-
-        if (k >= 46 && k <= 57) {
-            if (k == 46) {
-                int tama = alturaMin.length();
-                for (int i = 0; i <= tama; i++) {
-                    if (alturaMin.contains(".")) {
-                        evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-                    }
-                }
-            }
-            if (k == 47) {
-                evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-            }
-        } else {
-            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-            evt.consume();
-        }
-
-    }//GEN-LAST:event_txtAlturaMinKeyTyped
-
-    private void txtAlturaMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlturaMaxKeyTyped
-        String alturaMax = txtAlturaMax.getText();
-
-        int k = evt.getKeyChar();
-
-        if (k >= 46 && k <= 57) {
-            if (k == 46) {
-                int tama = alturaMax.length();
-                for (int i = 0; i <= tama; i++) {
-                    if (alturaMax.contains(".")) {
-                        evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-                    }
-                }
-            }
-            if (k == 47) {
-                evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-            }
-        } else {
-            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtAlturaMaxKeyTyped
-
-    private void txtEdadMaxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadMaxKeyTyped
-        int key = evt.getKeyChar();
-
-        boolean numeros = key >= 48 && key <= 57;
-
-        if (!numeros) {
-            evt.consume();
-        }
-
-        if (txtEdadMax.getText().trim().length() == 10) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtEdadMaxKeyTyped
-
     private void txtColorPeloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtColorPeloKeyTyped
         int key = evt.getKeyChar();
 
@@ -534,7 +463,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         boolean minusculas = key >= 97 && key <= 122;
         boolean espacio = key == 32;
 
-        if (!(minusculas || mayusculas)) {
+        if (!(minusculas || mayusculas || espacio)) {
             evt.consume();
         }
 
@@ -551,7 +480,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         boolean minusculas = key >= 97 && key <= 122;
         boolean espacio = key == 32;
 
-        if (!(minusculas || mayusculas)) {
+        if (!(minusculas || mayusculas || espacio)) {
             evt.consume();
         }
 
@@ -559,6 +488,10 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_txtColorOjosKeyTyped
+
+    private void comboBoxSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSexoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxSexoActionPerformed
 
     private void llenarTabla(ArrayList<Perfil> perfiles) {
 
@@ -580,15 +513,13 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
                 rowDataPerfiles1[0] = perfiles.get(i).getCodigo();
                 rowDataPerfiles1[1] = perfiles.get(i).getEstado().toString();
                 rowDataPerfiles1[2] = perfiles.get(i).getSexo().toString();
-                rowDataPerfiles1[3] = perfiles.get(i).getAlturaMin();
-                rowDataPerfiles1[4] = perfiles.get(i).getAlturaMax();
-                rowDataPerfiles1[5] = perfiles.get(i).getEdadMin();
+                rowDataPerfiles1[3] = perfiles.get(i).getRangoAltura();
 
                 modelPerfil1.addRow(rowDataPerfiles1);
             }
 
             for (int i = 0; i < perfiles.size(); i++) {
-                rowDataPerfiles2[0] = perfiles.get(i).getEdadMax();
+                rowDataPerfiles2[0] = perfiles.get(i).getRangoEdad();
                 rowDataPerfiles2[1] = perfiles.get(i).getColorCabello();
                 rowDataPerfiles2[2] = perfiles.get(i).getColorOjos();
                 rowDataPerfiles2[3] = perfiles.get(i).getTipoPerfil().toString();
@@ -733,10 +664,8 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         txtCodigo.setText("");
         comboBoxEstados.setSelectedIndex(0);
         comboBoxSexo.setSelectedIndex(0);
-        txtAlturaMin.setText("");
-        txtAlturaMax.setText("");
-        txtEdadMin.setText("");
-        txtEdadMax.setText("");
+        comboBoxRangoAltura.setSelectedIndex(0);
+        comboBoxRangoEdad.setSelectedIndex(0);
         txtColorPelo.setText("");
         txtColorOjos.setText("");
         comboBoxPerfil.setSelectedIndex(0);
@@ -744,34 +673,16 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     }
 
     public boolean validar() {
-        if (txtAlturaMax.getText().equals("") || txtAlturaMin.getText().equals("") || txtCodigo.getText().equals("")
-                || txtColorOjos.getText().equals("") || txtColorPelo.getText().equals("") || txtEdadMax.getText().equals("")
-                || txtEdadMin.getText().equals("")) {
+        if (txtCodigo.getText().equals("") || txtColorOjos.getText().equals("") || txtColorPelo.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Llene todos los campos requeridos!");
             return false;
         }
-        float alturaMin = 0;
-        float alturaMax = 0;
-        int edadMin = 0;
-        int edadMax = 0;
-        try {
-            alturaMin = Float.parseFloat(txtAlturaMin.getText());
-            alturaMax = Float.parseFloat(txtAlturaMax.getText());
-            edadMin = Integer.parseInt(txtEdadMin.getText());
-            edadMax = Integer.parseInt(txtEdadMax.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Ingrese los debidos formatos!");
-            return false;
-        }
 
-        if (alturaMin > alturaMax || alturaMin <= 0 || alturaMax > 260 || alturaMax <= 0) {
-            JOptionPane.showMessageDialog(null, "Ingresar alturas validas!, llenela para guardar.");
-            return false;
-        }
-
-        if (edadMin > edadMax || edadMin <= 0 || edadMax > 120 || edadMax <= 0) {
-            JOptionPane.showMessageDialog(null, "Ingresar edades validas!, llenela para guardar.");
-            return false;
+        for (int i = 0; i < perfiles.size(); i++) {
+            if (perfiles.get(i).getCodigo().equals(txtCodigo.getText())) {
+                JOptionPane.showMessageDialog(null, "El perfil ya existe!");
+                return false;
+            }
         }
 
         return true;
@@ -783,9 +694,12 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JComboBox<String> comboBoxCastings;
     private javax.swing.JComboBox<String> comboBoxEstados;
     private javax.swing.JComboBox<String> comboBoxExperiencia;
     private javax.swing.JComboBox<String> comboBoxPerfil;
+    private javax.swing.JComboBox<String> comboBoxRangoAltura;
+    private javax.swing.JComboBox<String> comboBoxRangoEdad;
     private javax.swing.JComboBox<String> comboBoxSexo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -793,21 +707,16 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblCasting;
     private javax.swing.JTable tblPerfil1;
     private javax.swing.JTable tblPerfil2;
-    private javax.swing.JTextField txtAlturaMax;
-    private javax.swing.JTextField txtAlturaMin;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtColorOjos;
     private javax.swing.JTextField txtColorPelo;
-    private javax.swing.JTextField txtEdadMax;
-    private javax.swing.JTextField txtEdadMin;
     // End of variables declaration//GEN-END:variables
 }

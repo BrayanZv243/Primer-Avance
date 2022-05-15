@@ -26,10 +26,10 @@ public class CastingPresencial extends Casting {
 
     public CastingPresencial(int numPersonas, Sala sala, boolean aprobado, float costo, 
             String codigo, String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, 
-            CastingPresencial castingPresencial, ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+            CastingPresencial castingPresencial, Cliente cliente, Agente agente, Fase fase) {
         
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, castingPresencial, 
-                perfiles, cliente, agente, fase);
+                cliente, agente, fase);
         
         this.numPersonas = numPersonas;
         this.sala = sala;
@@ -37,10 +37,10 @@ public class CastingPresencial extends Casting {
 
     public CastingPresencial(int numPersonas, Sala sala, boolean aprobado, float costo, String codigo, String nombre, 
             String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline, 
-            ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+            Cliente cliente, Agente agente, Fase fase) {
         
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, castingOnline, 
-                perfiles, cliente, agente, fase);
+                cliente, agente, fase);
         
         this.numPersonas = numPersonas;
         this.sala = sala;

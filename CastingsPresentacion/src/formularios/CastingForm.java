@@ -11,30 +11,31 @@ import dialogsCliente.DlgRegistrarCliente;
 import entidades.Cliente;
 import interfaces.*;
 import java.util.List;
-import BOSFactory.*;
+import dlgcompartidos.DlgLlenarPerfil;
 import entidades.Agente;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import negocio.PersistenciaFachada;
 import utils.Conversiones;
-
 
 public class CastingForm extends javax.swing.JFrame {
 
     Conversiones conversiones;
     IPersistenciaFachada persistencia;
-    
+    ArrayList perfiles;
+
     List<Cliente> clientes;
     List<Agente> agentes;
-    
+
     public CastingForm() {
         persistencia = PersistenciaFachada.getInstance();
         conversiones = Conversiones.getInstance();
+        perfiles = new ArrayList<>();
         initComponents();
         setLocationRelativeTo(null);
     }
-    
-   
-    
+
     /**
      * @param args the command line arguments
      */
@@ -69,7 +70,7 @@ public class CastingForm extends javax.swing.JFrame {
             }
         });
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,14 +83,10 @@ public class CastingForm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         opcionMenuAgregarCasting = new javax.swing.JMenuItem();
-        opcionMenuActualizarCasting = new javax.swing.JMenuItem();
         opcionMenuBuscarCasting = new javax.swing.JMenuItem();
-        opcionMenuEliminarCasting = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         opcionMenuAgregarCliente = new javax.swing.JMenuItem();
-        opcionMenuActualizarCliente = new javax.swing.JMenuItem();
-        opcionMenuBuscarCliente = new javax.swing.JMenuItem();
-        opcionMenuEliminarCliente = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         opcionMenuAgregarAgente = new javax.swing.JMenuItem();
 
@@ -106,19 +103,16 @@ public class CastingForm extends javax.swing.JFrame {
         });
         jMenu1.add(opcionMenuAgregarCasting);
 
-        opcionMenuActualizarCasting.setText("Actualizar Casting");
-        jMenu1.add(opcionMenuActualizarCasting);
-
         opcionMenuBuscarCasting.setText("Buscar Casting");
         jMenu1.add(opcionMenuBuscarCasting);
 
-        opcionMenuEliminarCasting.setText("Eliminar Casting");
-        opcionMenuEliminarCasting.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setText("Registrar Perfil");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opcionMenuEliminarCastingActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(opcionMenuEliminarCasting);
+        jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
 
@@ -131,15 +125,6 @@ public class CastingForm extends javax.swing.JFrame {
             }
         });
         jMenu2.add(opcionMenuAgregarCliente);
-
-        opcionMenuActualizarCliente.setText("Actualizar Cliente");
-        jMenu2.add(opcionMenuActualizarCliente);
-
-        opcionMenuBuscarCliente.setText("Buscar Cliente");
-        jMenu2.add(opcionMenuBuscarCliente);
-
-        opcionMenuEliminarCliente.setText("Eliminar Cliente");
-        jMenu2.add(opcionMenuEliminarCliente);
 
         jMenuBar1.add(jMenu2);
 
@@ -174,13 +159,9 @@ public class CastingForm extends javax.swing.JFrame {
     private void opcionMenuAgregarCastingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuAgregarCastingActionPerformed
         DefaultComboBoxModel clientes = conversiones.clientesComboBoxModel(persistencia.buscarClientes());
         DefaultComboBoxModel agentes = conversiones.agentesComboBoxModel(persistencia.buscarAgentes());
-        
-        new DlgRegistrarCasting(clientes,agentes);
-    }//GEN-LAST:event_opcionMenuAgregarCastingActionPerformed
 
-    private void opcionMenuEliminarCastingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuEliminarCastingActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_opcionMenuEliminarCastingActionPerformed
+        new DlgRegistrarCasting(clientes, agentes);
+    }//GEN-LAST:event_opcionMenuAgregarCastingActionPerformed
 
     private void opcionMenuAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuAgregarClienteActionPerformed
         new DlgRegistrarCliente();
@@ -190,21 +171,27 @@ public class CastingForm extends javax.swing.JFrame {
         new DlgRegistrarAgente();
     }//GEN-LAST:event_opcionMenuAgregarAgenteActionPerformed
 
-    
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        DefaultComboBoxModel castings = conversiones.castingsComboBoxModel(persistencia.buscarCastings());
+        if (castings == null) {
+            JOptionPane.showMessageDialog(null, "Necesita agregar un casting para agregarle un Perfil!",
+                    "Perfil", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            new DlgLlenarPerfil(perfiles, castings);
+        }
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem opcionMenuActualizarCasting;
-    private javax.swing.JMenuItem opcionMenuActualizarCliente;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem opcionMenuAgregarAgente;
     private javax.swing.JMenuItem opcionMenuAgregarCasting;
     private javax.swing.JMenuItem opcionMenuAgregarCliente;
     private javax.swing.JMenuItem opcionMenuBuscarCasting;
-    private javax.swing.JMenuItem opcionMenuBuscarCliente;
-    private javax.swing.JMenuItem opcionMenuEliminarCasting;
-    private javax.swing.JMenuItem opcionMenuEliminarCliente;
     // End of variables declaration//GEN-END:variables
 }

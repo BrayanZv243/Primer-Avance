@@ -11,6 +11,7 @@ import factory.DAOSFactory;
 import interfaces.ICastingsDAO;
 import persistencia.CastingsDAO;
 import interfaces.ICastingsService;
+import java.util.List;
 
 /**
  * 
@@ -32,18 +33,18 @@ public class CastingService implements ICastingsService{
     }
 
     @Override
-    public boolean buscarCasting(String codigo) {
+    public boolean buscarCastingPorCodigo(String codigo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean eliminarCasting(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Casting> buscarCastings(){
+        return castingDAO.buscarCastings();
     }
-
+    
     @Override
-    public boolean actualizarCasting(Casting casting) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean actualizarCasting(Casting casting){
+        return castingDAO.actualizarCasting(casting);
     }
 
     @Override

@@ -4,17 +4,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsFase/DlgRegistrarRepresentante.java</file>
-            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsAgente/DlgRegistrarAgente.java</file>
-            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsCasting/DlgRegistrarCasting.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsFase/DlgRegistrarCandidato.java</file>
-            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsCasting/DlgSeleccionarModalidad.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/formularios/CastingForm.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsFase/DlgRegistrarPrueba.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dlgcompartidos/DlgRegistrarContacto.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsAgente/DlgRegistrarAgente.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsCasting/DlgRegistrarCasting.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsCasting/DlgSeleccionarModalidad.java</file>
+            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/utils/Conversiones.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsFase/DlgRegistrarFase.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dialogsCliente/DlgRegistrarCliente.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dlgcompartidos/DlgLlenarPerfil.java</file>
             <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dlgcompartidos/DlgDireccion.java</file>
-            <file>file:/C:/Users/Brayan%20Z/Documents/NetBeansProjects/CastingsPresentacion/src/dlgcompartidos/DlgRegistrarContacto.java</file>
         </group>
     </open-files>
 </project-private>

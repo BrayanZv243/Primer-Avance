@@ -17,22 +17,17 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="opcionMenuAgregarCastingActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="opcionMenuActualizarCasting">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Actualizar Casting"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="opcionMenuBuscarCasting">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar Casting"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="opcionMenuEliminarCasting">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar Casting"/>
+                <Property name="text" type="java.lang.String" value="Registrar Perfil"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="opcionMenuEliminarCastingActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -49,21 +44,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="opcionMenuAgregarClienteActionPerformed"/>
               </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="opcionMenuActualizarCliente">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Actualizar Cliente"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="opcionMenuBuscarCliente">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Buscar Cliente"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="opcionMenuEliminarCliente">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar Cliente"/>
-              </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -2,6 +2,7 @@ package utils;
 
 
 import entidades.Agente;
+import entidades.Casting;
 import entidades.Cliente;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -49,6 +50,27 @@ public class Conversiones {
         }
         return null;
     }
+    
+    /**
+     * Genera un objeto de tipo DefaultComboBoxModel a partir de una lista de
+     * castings.
+     *
+     * @param listaCastings Lista de los castings.
+     * @return Lista de castings en una combo box model.
+     */
+    public DefaultComboBoxModel<Casting> castingsComboBoxModel(List<Casting> listaCastings) {
+        DefaultComboBoxModel<Casting> defaultComboBoxModel = new DefaultComboBoxModel<>();
+        if (listaCastings != null) {
+            // Para cada elemento de la Lista 
+            for (int i = 0; i < listaCastings.size(); i++) {
+                // Agregalo a la instancia de la clase DefaultComboBoxModel 
+                defaultComboBoxModel.addElement(listaCastings.get(i));
+            }
+            return defaultComboBoxModel;
+        }
+        return null;
+    }
+    
     
     public static Conversiones getInstance(){
         if(conversiones == null) return new Conversiones();

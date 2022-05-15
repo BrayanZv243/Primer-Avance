@@ -25,11 +25,11 @@ public class CastingOnline extends Casting {
 
     public CastingOnline(String enlace, int asistente, boolean aprobado, float costo, String codigo, 
             String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, 
-            CastingPresencial castingPresencial, ArrayList<Perfil> perfiles, Cliente cliente, 
+            CastingPresencial castingPresencial, Cliente cliente, 
             Agente agente, Fase fase) {
         
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, 
-                castingPresencial, perfiles, cliente, agente, fase);
+                castingPresencial, cliente, agente, fase);
         
         this.enlace = enlace;
         this.asistente = asistente;
@@ -37,9 +37,9 @@ public class CastingOnline extends Casting {
 
     public CastingOnline(String enlace, int asistente, boolean aprobado, float costo, String codigo, 
             String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, 
-            CastingOnline castingOnline, ArrayList<Perfil> perfiles, Cliente cliente, Agente agente, Fase fase) {
+            CastingOnline castingOnline, Cliente cliente, Agente agente, Fase fase) {
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, 
-                castingOnline, perfiles, cliente, agente, fase);
+                castingOnline, cliente, agente, fase);
         
         this.enlace = enlace;
         this.asistente = asistente;

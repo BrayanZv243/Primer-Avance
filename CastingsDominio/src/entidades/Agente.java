@@ -8,6 +8,7 @@ package entidades;
  *
  * @author lv1822
  */
+
 public class Agente extends Persona{
     int numEmpleado;
 

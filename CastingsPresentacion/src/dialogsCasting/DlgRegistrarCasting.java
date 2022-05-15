@@ -88,7 +88,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         dateTimeFin = new com.github.lgooddatepicker.components.DateTimePicker();
         btnSeleccionarModalidad = new javax.swing.JButton();
-        btnLlenarPerfil = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         comboBoxAprobado = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
@@ -102,6 +101,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Casting");
+        setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel1.setText("Codigo:");
 
@@ -137,13 +137,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         btnSeleccionarModalidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSeleccionarModalidadActionPerformed(evt);
-            }
-        });
-
-        btnLlenarPerfil.setText("Registrar Perfil");
-        btnLlenarPerfil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLlenarPerfilActionPerformed(evt);
             }
         });
 
@@ -221,8 +214,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnSeleccionarModalidad, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                                    .addComponent(btnRegistrarFase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnLlenarPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(btnRegistrarFase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,9 +239,9 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -257,11 +249,10 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLlenarPerfil)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(btnSeleccionarModalidad)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(btnRegistrarFase)))
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,26 +301,22 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     private void btnSeleccionarModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarModalidadActionPerformed
         CastingPresencial cp = DlgSeleccionarModalidad.getCastingPresencial();
         CastingOnline co = DlgSeleccionarModalidad.getCastingOnline();
-        if(cp != null){
-            dlgModalidad = new DlgSeleccionarModalidad(cp,null);
-        } else if(co != null){
-            dlgModalidad = new DlgSeleccionarModalidad(null,co);
+        if (cp != null) {
+            dlgModalidad = new DlgSeleccionarModalidad(cp, null);
+        } else if (co != null) {
+            dlgModalidad = new DlgSeleccionarModalidad(null, co);
         } else {
-            new DlgSeleccionarModalidad(cp,co);
+            new DlgSeleccionarModalidad(cp, co);
         }
-        
-        
+
 
     }//GEN-LAST:event_btnSeleccionarModalidadActionPerformed
 
-    private void btnLlenarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLlenarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil(perfiles);
-        perfiles = dlgPerfil.getPerfil();
-    }//GEN-LAST:event_btnLlenarPerfilActionPerformed
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if(!validar()) return;
-        
+        if (!validar()) {
+            return;
+        }
+
         String codigo = txtCodigo.getText();
         String nombre = txtNombre.getText();
         String descripcion = txtDescripcion.getText();
@@ -344,29 +331,43 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         CastingOnline co = dlgModalidad.getCastingOnline();
         perfiles = dlgPerfil.getPerfil();
 
-        if (cp != null) {
-            Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
-                    fechaContrato, fechaHoraInicio, fechaHoraFin, cp, perfiles,
-                    cliente, agente, fase);
+        try {
+            if (cp.getSala().getNombre() != null) {
+                Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
+                        fechaContrato, fechaHoraInicio, fechaHoraFin, cp,
+                        cliente, agente, fase);
 
-            persistenciaFachada.registrarCasting(casting);
-            JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+                persistenciaFachada.registrarCasting(casting);
+                JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
+                        "Error", JOptionPane.INFORMATION_MESSAGE);
 
-            dispose();
-        } else if (co != null) {
-            Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
-                    fechaContrato, fechaHoraInicio, fechaHoraFin, co, perfiles,
-                    cliente, agente, fase);
+                fase = new Fase();
+                perfiles = new ArrayList<>();
+                cp = new CastingPresencial();
+                dispose();
+            }
+        } catch (NullPointerException e) {
+            try {
+                if (co.getEnlace() != null) {
+                    Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
+                            fechaContrato, fechaHoraInicio, fechaHoraFin, co, 
+                            cliente, agente, fase);
 
-            persistenciaFachada.registrarCasting(casting);
-            JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
-
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Campos vacíos o inválidos, verifiquelos e intentelo de nuevo.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    persistenciaFachada.registrarCasting(casting);
+                    JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
+                            "Error", JOptionPane.INFORMATION_MESSAGE);
+                    fase = new Fase();
+                    perfiles = new ArrayList<>();
+                    co = new CastingOnline();
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Campos vacíos o inválidos, verifiquelos e intentelo de nuevo.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado. "+ex,
+                            "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
 
@@ -543,7 +544,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton btnLlenarPerfil;
     private javax.swing.JButton btnRegistrarFase;
     private javax.swing.JButton btnSeleccionarModalidad;
     private javax.swing.JComboBox<String> comboBoxAgentes;

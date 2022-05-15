@@ -5,9 +5,11 @@
  */
 package BOSFactory;
 
+import interfaces.IAdministradorService;
 import interfaces.IAgentesService;
 import interfaces.ICastingsService;
 import interfaces.IClientesService;
+import negocio.AdministradorService;
 import negocio.AgentesService;
 import negocio.CastingService;
 import negocio.ClientesService;
@@ -30,5 +32,8 @@ public class BOSFactory {
         return new CastingService();
     }
 
-    
+    public static IAdministradorService crearAdministradorService() {
+        return new AdministradorService();
+    }
+
 }

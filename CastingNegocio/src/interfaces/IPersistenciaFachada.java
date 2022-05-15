@@ -25,7 +25,8 @@ public interface IPersistenciaFachada {
     
     
     public boolean registrarCasting(Casting casting);
-    public boolean buscarCasting(String codigo);
-    
+    public boolean buscarCastingPorCodigo(String codigo);
+    public List<Casting> buscarCastings();
+    public boolean actualizarCasting(Casting casting);
     
 }

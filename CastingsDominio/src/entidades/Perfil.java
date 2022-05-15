@@ -15,10 +15,8 @@ public class Perfil {
     String codigo;
     Estado estado;
     Sexo sexo;
-    float alturaMax;
-    float alturaMin;
-    int edadMin;
-    int edadMax;
+    String rangoAltura;
+    String rangoEdad;
     String colorCabello;
     String colorOjos;
     boolean experiencia;
@@ -27,24 +25,17 @@ public class Perfil {
     public Perfil() {
     }
 
-    public Perfil(String codigo, Estado estado, Sexo sexo, 
-            float alturaMax, float alturaMin, int edadMin, int 
-                    edadMax, String colorCabello, String colorOjos, boolean experiencia, EPerfil tipoPerfil) {
+    public Perfil(String codigo, Estado estado, Sexo sexo, String rangoAltura, String rangoEdad, 
+            String colorCabello, String colorOjos, boolean experiencia, EPerfil tipoPerfil) {
         this.codigo = codigo;
         this.estado = estado;
         this.sexo = sexo;
-        this.alturaMax = alturaMax;
-        this.alturaMin = alturaMin;
-        this.edadMin = edadMin;
-        this.edadMax = edadMax;
+        this.rangoAltura = rangoAltura;
+        this.rangoEdad = rangoEdad;
         this.colorCabello = colorCabello;
         this.colorOjos = colorOjos;
         this.experiencia = experiencia;
         this.tipoPerfil = tipoPerfil;
-    }
-
-    public Perfil(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getCodigo() {
@@ -71,36 +62,20 @@ public class Perfil {
         this.sexo = sexo;
     }
 
-    public float getAlturaMax() {
-        return alturaMax;
+    public String getRangoAltura() {
+        return rangoAltura;
     }
 
-    public void setAlturaMax(float alturaMax) {
-        this.alturaMax = alturaMax;
+    public void setRangoAltura(String rangoAltura) {
+        this.rangoAltura = rangoAltura;
     }
 
-    public float getAlturaMin() {
-        return alturaMin;
+    public String getRangoEdad() {
+        return rangoEdad;
     }
 
-    public void setAlturaMin(float alturaMin) {
-        this.alturaMin = alturaMin;
-    }
-
-    public int getEdadMin() {
-        return edadMin;
-    }
-
-    public void setEdadMin(int edadMin) {
-        this.edadMin = edadMin;
-    }
-
-    public int getEdadMax() {
-        return edadMax;
-    }
-
-    public void setEdadMax(int edadMax) {
-        this.edadMax = edadMax;
+    public void setRangoEdad(String rangoEdad) {
+        this.rangoEdad = rangoEdad;
     }
 
     public String getColorCabello() {
@@ -137,8 +112,10 @@ public class Perfil {
 
     @Override
     public String toString() {
-        return "Perfil{" + "codigo=" + codigo + ", estado=" + estado + ", sexo=" + sexo + ", alturaMax=" + alturaMax + ", alturaMin=" + alturaMin + ", edadMin=" + edadMin + ", edadMax=" + edadMax + ", colorCabello=" + colorCabello + ", colorOjos=" + colorOjos + ", experiencia=" + experiencia + ", tipoPerfil=" + tipoPerfil + '}';
+        return "Perfil{" + "codigo=" + codigo + ", estado=" + estado + ", sexo=" + sexo + ", rangoAltura=" + rangoAltura + ", rangoEdad=" + rangoEdad + ", colorCabello=" + colorCabello + ", colorOjos=" + colorOjos + ", experiencia=" + experiencia + ", tipoPerfil=" + tipoPerfil + '}';
     }
+
+    
     
     
 }

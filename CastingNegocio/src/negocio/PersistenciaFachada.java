@@ -67,8 +67,18 @@ public class PersistenciaFachada implements IPersistenciaFachada {
     }
 
     @Override
-    public boolean buscarCasting(String codigo) {
+    public boolean buscarCastingPorCodigo(String codigo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public boolean actualizarCasting(Casting casting){
+        return castingsBO.actualizarCasting(casting);
+    }
+    
+    @Override
+    public List<Casting> buscarCastings(){
+        return castingsBO.buscarCastings();
     }
 
 }

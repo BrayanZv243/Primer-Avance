@@ -5,19 +5,17 @@
  */
 package interfaces;
 
-import entidades.Casting;
+import entidades.Administrador;
 import java.util.List;
 
 /**
  *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
-public interface ICastingsService {
+public interface IAdministradorService {
     
-    public boolean registrarCasting(Casting casting);
-    public boolean buscarCastingPorCodigo(String codigo);
-    public List<Casting> buscarCastings();
-    public boolean actualizarCasting(Casting casting);
-    public boolean validar();
+    public boolean registrarAdministrador(Administrador admin);
+    public List<Administrador> buscarAdministradores();
+    public Administrador consultarAdmin(String admin);
     
 }

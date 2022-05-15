@@ -448,7 +448,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
     }//GEN-LAST:event_comboBoxCandidatoItemStateChanged
 
     private void btnRegistrarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil(perfiles);
+        dlgPerfil = new DlgLlenarPerfil(perfiles,null);
         perfiles = dlgPerfil.getPerfil();
     }//GEN-LAST:event_btnRegistrarPerfilActionPerformed
 

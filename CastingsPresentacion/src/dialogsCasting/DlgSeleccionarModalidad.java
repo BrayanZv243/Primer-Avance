@@ -381,6 +381,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
     }//GEN-LAST:event_spinnerNumPersonasPresencialInputMethodTextChanged
 
     private boolean validaciones() {
+
         if (comboBoxModalidad.getSelectedIndex() == 0) {
             String nombreSala = txtNombreSala.getText();
             String descripcionSala = txtDescripcionSala.getText();
@@ -389,8 +390,15 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
             } catch (NumberFormatException e) {
                 return false;
             }
+            try {
+                if (direccion == null && direccion.getCalle().equals("")) return false;
+            } catch (NullPointerException e) {
+                return false;
+            }
 
-            return direccion != null && !nombreSala.equals("") && !descripcionSala.equals("");
+            if (nombreSala.equals("") || descripcionSala.equals("")) {
+                return false;
+            }
         } else {
             try {
                 int numPersonas = (int) spinnerNumPersonasOnline.getValue();
@@ -401,7 +409,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
             String enlace = txtOnlineEnlace.getText();
             return !enlace.equals("");
         }
-
+        return true;
     }
 
     public void limpiar() {
