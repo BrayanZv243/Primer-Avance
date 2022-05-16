@@ -9,6 +9,8 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import dialogsAgente.DlgRegistrarAgente;
 import dialogsCliente.DlgRegistrarCliente;
+import dialogsFase.DlgRegistrarFase;
+import dlgcompartidos.DlgLlenarPerfil;
 import entidades.Casting;
 import entidades.CastingOnline;
 import entidades.CastingPresencial;
@@ -169,6 +171,11 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
         jLabel4.setText("Buscar por:");
 
         btnPerfiles.setText("Perfiles");
+        btnPerfiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerfilesActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -267,23 +274,27 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModalidadActionPerformed
-        if(!validarSeleccion()){
+        if (!validarSeleccion()) {
             return;
         }
         Casting casting = (Casting) castings.get(tblCastings.getSelectedRow());
-        try{
+        try {
             CastingPresencial cp = casting.getCastingPresencial();
-            new DlgSeleccionarModalidad(cp, new CastingOnline(),1);
-        }catch(Exception e){
+            new DlgSeleccionarModalidad(cp, new CastingOnline(), 1);
+        } catch (Exception e) {
             CastingOnline co = casting.getCastingOnline();
-            new DlgSeleccionarModalidad(new CastingPresencial(),co,1);
+            new DlgSeleccionarModalidad(new CastingPresencial(), co, 1);
         }
-        
-        
+
+
     }//GEN-LAST:event_btnModalidadActionPerformed
 
     private void btnFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFaseActionPerformed
-        // TODO add your handling code here:
+        if (!validarSeleccion()) {
+            return;
+        }
+        Casting casting = (Casting) castings.get(tblCastings.getSelectedRow());
+        new DlgRegistrarFase(casting.getFase(), 1);
     }//GEN-LAST:event_btnFaseActionPerformed
 
     private void comboBoxSeleccionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxSeleccionItemStateChanged
@@ -316,7 +327,7 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
         txtCodigo.setText("");
         txtNombre.setText("");
         dateFechaContrato.setText("");
-        
+
     }//GEN-LAST:event_comboBoxSeleccionItemStateChanged
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -339,7 +350,7 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
             }
             JOptionPane.showMessageDialog(null, "No se encontró el casting!",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            
+
             return;
         }
 
@@ -351,15 +362,14 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            List<Casting> casting = persistencia.buscarCastingPorNombre(nombre);
+            Casting casting = persistencia.buscarCastingPorNombre(nombre);
             if (casting != null) {
-                llenarTablaParaCastings(casting);
-                
+                llenarTabla(casting);
                 return;
             }
             JOptionPane.showMessageDialog(null, "No se encontró el casting!",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            
+
             return;
         }
 
@@ -432,7 +442,7 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
                 rowDataPerfiles1[6] = castings.get(i).getFechaHoraFin().toGMTString();
 
                 modelCastings.addRow(rowDataPerfiles1);
-                
+
                 this.castings.add(castings.get(i));
             }
 
@@ -454,32 +464,53 @@ public class DlgBuscarCasting extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCodigoKeyTyped
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-        if(!validarSeleccion()){
+        if (!validarSeleccion()) {
             return;
         }
         Casting casting = (Casting) castings.get(tblCastings.getSelectedRow());
         new DlgRegistrarCliente(casting.getCliente());
-        
+
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnAgenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgenteActionPerformed
-        if(!validarSeleccion()){
+        if (!validarSeleccion()) {
             return;
         }
         Casting casting = (Casting) castings.get(tblCastings.getSelectedRow());
-        new DlgRegistrarAgente(casting.getAgente(),1);
+        new DlgRegistrarAgente(casting.getAgente(), 1);
     }//GEN-LAST:event_btnAgenteActionPerformed
 
-    private boolean validarSeleccion(){
-        if(tblCastings.getSelectedRow() == -1){
+    private void btnPerfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilesActionPerformed
+        if (!validarSeleccion()) {
+            return;
+        }
+        Casting casting = (Casting) castings.get(tblCastings.getSelectedRow());
+        try {
+            if (casting.getPerfiles().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Este casting aún no tiene perfiles!",
+                        "Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        } catch (NullPointerException e) {
+
+            JOptionPane.showMessageDialog(null, "Este casting aún no tiene perfiles!",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+
+        }
+        new DlgLlenarPerfil(casting.getPerfiles(), 1);
+    }//GEN-LAST:event_btnPerfilesActionPerformed
+
+    private boolean validarSeleccion() {
+        if (tblCastings.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione una fila!",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
+
         return true;
     }
-    
+
     public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
         ZoneId defaultZoneId = ZoneId.systemDefault();
 

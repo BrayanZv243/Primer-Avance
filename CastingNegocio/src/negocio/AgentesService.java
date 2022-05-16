@@ -7,11 +7,10 @@
 package negocio;
 
 import entidades.Agente;
-import factory.DAOSFactory;
-import interfaces.IAgentesDAO;
 import interfaces.IAgentesService;
+import interfaces.IPersistencia;
 import java.util.List;
-import persistencia.AgentesDAO;
+import persistencia.Persistencia;
 
 /**
  * 
@@ -19,12 +18,12 @@ import persistencia.AgentesDAO;
  */
 public class AgentesService implements IAgentesService{
 
-    IAgentesDAO agentesDAO = DAOSFactory.crearAgentesDAO();
+    IPersistencia persistencia = Persistencia.getInstance();
     
     @Override
     public boolean registrarAgente(Agente agente) {
        if(validar(agente.getNumEmpleado())){
-            agentesDAO.registrarAgente(agente);
+            persistencia.registrarAgente(agente);
             return true;
         } else {
             return false;
@@ -33,25 +32,22 @@ public class AgentesService implements IAgentesService{
 
     @Override
     public List<Agente> buscarAgentes() { 
-        return agentesDAO.buscarAgentes();
+        return persistencia.buscarAgentes();
     }
-
+    
     @Override
-    public boolean eliminarAgente(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean actualizarAgente(Agente agente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Agente buscarAgentePorCodigo(int codigo) {
+        return persistencia.buscarAgentePorCodigo(codigo);
     }
 
     @Override
     public boolean validar(int codigo) {
-        Agente agente = agentesDAO.buscarAgentePorCodigo(codigo);
+        Agente agente = persistencia.buscarAgentePorCodigo(codigo);
         
         return agente == null;
 
     }
+
+    
 
 }

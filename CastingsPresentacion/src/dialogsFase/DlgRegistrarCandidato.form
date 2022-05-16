@@ -133,9 +133,9 @@
                           <Component id="lblRFC" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtRFC" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnRegistrarDireccion" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Component id="btnRegistrarContacto" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>

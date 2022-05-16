@@ -27,17 +27,18 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
     ArrayList<Perfil> perfiles;
     DefaultComboBoxModel listaCastings;
     IPersistenciaFachada persistenciaFachada;
+    int operacion;
 
     /**
      * Creates new form LlenarPerfil
      *
      * @param perfiles
-     * @param castings
      */
     public DlgLlenarPerfil(ArrayList<Perfil> perfiles, DefaultComboBoxModel listaCastings) {
         this.listaCastings = listaCastings;
         this.perfiles = perfiles;
         persistenciaFachada = PersistenciaFachada.getInstance();
+        this.operacion = 0;
         initComponents();
         if (listaCastings != null) {
             lblCasting.setVisible(true);
@@ -52,6 +53,47 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
         setVisible(true);
         llenarTabla(perfiles);
 
+    }
+
+    public DlgLlenarPerfil(ArrayList<Perfil> perfiles, int operacion) {
+        this.perfiles = perfiles;
+        this.operacion = operacion;
+        persistenciaFachada = PersistenciaFachada.getInstance();
+        initComponents();
+        if (listaCastings != null) {
+            lblCasting.setVisible(true);
+            comboBoxCastings.setVisible(true);
+            comboBoxCastings.setModel(listaCastings);
+        } else {
+            lblCasting.setVisible(false);
+            comboBoxCastings.setVisible(false);
+
+        }
+        setLocationRelativeTo(null);
+        setVisible(true);
+        llenarTabla(perfiles);
+        if (operacion == 1) {
+            desactivarCampos();
+        }
+
+    }
+
+    private void desactivarCampos() {
+        txtCodigo.setEditable(false);
+        txtColorOjos.setEditable(false);
+        txtColorPelo.setEditable(false);
+        comboBoxCastings.setEnabled(false);
+        comboBoxEstados.setEnabled(false);
+        comboBoxExperiencia.setEnabled(false);
+        comboBoxPerfil.setEnabled(false);
+        comboBoxRangoAltura.setEnabled(false);
+        comboBoxRangoEdad.setEnabled(false);
+        comboBoxSexo.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+        btnInsertar.setEnabled(false);
+        btnCancelar.setText("Salir");
+        btnGuardar.setEnabled(false);
+        btnEliminar.setEnabled(false);
     }
 
     /**
@@ -387,8 +429,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             }
 
         }
-        
-        
+
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -681,6 +722,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             return false;
         }
 
+        
         for (int i = 0; i < perfiles.size(); i++) {
             if (perfiles.get(i).getCodigo().equals(txtCodigo.getText())) {
                 JOptionPane.showMessageDialog(null, "El perfil ya existe!");

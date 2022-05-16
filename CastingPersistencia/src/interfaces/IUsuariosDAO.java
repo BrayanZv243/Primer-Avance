@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IUsuariosDAO {
     
-    public void registrarUsuario(Usuario usuario);
+    public boolean registrarUsuario(Usuario usuario);
     public List<Usuario> buscarTodos();
     
     

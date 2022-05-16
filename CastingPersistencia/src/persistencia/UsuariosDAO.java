@@ -19,37 +19,41 @@ import javax.swing.JOptionPane;
  *
  * @author Jonathan
  */
-public class UsuariosDAO implements IUsuariosDAO{
-private IConexionBD conexion;
-   private MongoDatabase baseDatos;
+public class UsuariosDAO implements IUsuariosDAO {
+
+    private IConexionBD conexion;
+    private MongoDatabase baseDatos;
+
     public UsuariosDAO(IConexionBD conexion) {
         this.conexion = conexion;
-        this.baseDatos = this.conexion.obtenerConexion(); 
+        this.baseDatos = this.conexion.obtenerConexion();
     }
-        private MongoCollection<Usuario> getColeccion(){
+
+    private MongoCollection<Usuario> getColeccion() {
         return baseDatos.getCollection("usuarios", Usuario.class);
     }
+
     @Override
-    public void registrarUsuario(Usuario usuario) {
+    public boolean registrarUsuario(Usuario usuario) {
         try {
-           this.getColeccion().insertOne(usuario);
-            
+            this.getColeccion().insertOne(usuario);
+            return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al guardar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            return false;
         }
     }
-    
 
     @Override
     public List<Usuario> buscarTodos() {
-        
-         List<Usuario> usuarios = baseDatos.getCollection("usuarios", Usuario.class).find().into(new ArrayList());
-        
+
+        List<Usuario> usuarios = baseDatos.getCollection("usuarios", Usuario.class).find().into(new ArrayList());
+
         if (usuarios.isEmpty()) {
             return null;
         }
         return usuarios;
 
     }
-    
+
 }

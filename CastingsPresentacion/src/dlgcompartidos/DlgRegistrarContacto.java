@@ -47,7 +47,7 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.persona = persona;
-        this.operacion = 1;
+        this.operacion = operacion;
         llenarCampos();
         if(operacion == 1){
             desactivarCampos();
@@ -63,6 +63,7 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         btnLimpiar.setEnabled(false);
         btnGuardar.setEnabled(false);
         btnCancelar.setText("Salir");
+        btnRegistrarDireccion.setText("Ver Direccion...");
     }
     
     private void llenarCampos(){

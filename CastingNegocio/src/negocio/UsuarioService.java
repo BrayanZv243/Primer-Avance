@@ -6,24 +6,23 @@
 package negocio;
 
 import entidades.Usuario;
-import factory.DAOSFactory;
-import interfaces.IClientesDAO;
+import interfaces.IPersistencia;
 import interfaces.IUsuarioService;
-import interfaces.IUsuariosDAO;
 import java.util.List;
+import persistencia.Persistencia;
 
 /**
  *
  * @author Jonathan
  */
-public class UsuarioService implements IUsuarioService{
+public class UsuarioService implements IUsuarioService {
 
-    IUsuariosDAO usuariosDAO = DAOSFactory.crearUsuariosDAO();
-    
+    IPersistencia persistencia = Persistencia.getInstance();
+
     @Override
     public boolean registrarUsuario(Usuario usuario) {
-          if(validar()){
-            usuariosDAO.registrarUsuario(usuario);
+        if (validar()) {
+            persistencia.registrarUsuario(usuario);
             return true;
         } else {
             return false;
@@ -33,14 +32,11 @@ public class UsuarioService implements IUsuarioService{
 
     @Override
     public List<Usuario> buscarUsuarios() {
-
-         return usuariosDAO.buscarTodos();
-
-
+        return persistencia.buscarUsuarios();
     }
-    
-    public boolean validar(){
+
+    public boolean validar() {
         return true;
     }
-    
+
 }

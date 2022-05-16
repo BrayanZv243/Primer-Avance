@@ -113,7 +113,7 @@ public class CastingsDAO implements ICastingsDAO {
     }
     
     @Override
-    public List<Casting> buscarCastingPorNombre(String nombre) {
+    public Casting buscarCastingPorNombre(String nombre) {
 
         List<Casting> casting = baseDatos.getCollection("castings", Casting.class).find(new Document()
                 .append("nombre", nombre)).into(new ArrayList());
@@ -121,7 +121,7 @@ public class CastingsDAO implements ICastingsDAO {
         if (casting.isEmpty()) {
             return null;
         }
-        return casting;
+        return casting.get(0);
     }
     
     @Override

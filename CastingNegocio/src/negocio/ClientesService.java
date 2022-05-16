@@ -7,10 +7,10 @@
 package negocio;
 
 import entidades.Cliente;
-import factory.DAOSFactory;
-import interfaces.IClientesDAO;
 import interfaces.IClientesService;
+import interfaces.IPersistencia;
 import java.util.List;
+import persistencia.Persistencia;
 
 
 /**
@@ -19,12 +19,12 @@ import java.util.List;
  */
 public class ClientesService implements IClientesService{
 
-    IClientesDAO clientesDAO = DAOSFactory.crearClientesDAO();
+    IPersistencia persistencia = Persistencia.getInstance();
     
     @Override
     public boolean registrarCliente(Cliente cliente) {
         if(validar(cliente.getCodigo())){
-            clientesDAO.registrarCliente(cliente);
+            persistencia.registrarCliente(cliente);
             return true;
         } else {
             return false;
@@ -33,17 +33,17 @@ public class ClientesService implements IClientesService{
 
     @Override
     public List<Cliente> buscarClientes() {
-        return clientesDAO.buscarClientes();
+        return persistencia.buscarClientes();
     }
 
     @Override
     public Cliente buscarClientePorCodigo(String codigo) {
-        return clientesDAO.buscarClientePorCodigo(codigo);
+        return persistencia.buscarClientePorCodigo(codigo);
     }
 
     @Override
     public boolean validar(String codigo) {
-        Cliente cliente = clientesDAO.buscarClientePorCodigo(codigo);
+        Cliente cliente = persistencia.buscarClientePorCodigo(codigo);
         
         return cliente == null;
     }

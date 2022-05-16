@@ -41,8 +41,8 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     Date fechaContrato;
     Date fechaHoraInicio;
     Date fechaHoraFin;
-
-    Fase fase = new Fase();
+    int operacion;
+    ArrayList fases;
 
     DlgLlenarPerfil dlgPerfil;
     DlgSeleccionarModalidad dlgModalidad;
@@ -57,6 +57,8 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         persistenciaFachada = PersistenciaFachada.getInstance();
         this.listaAgentes = listaAgentes;
         this.listaClientes = listaClientes;
+        fases = new ArrayList<>();
+        operacion = 0;
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -172,7 +174,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             }
         });
 
-        btnRegistrarFase.setText("Registrar Fase");
+        btnRegistrarFase.setText("Registrar Fases");
         btnRegistrarFase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarFaseActionPerformed(evt);
@@ -329,17 +331,17 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             if (cp.getSala().getNombre() != null) {
                 Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
                         fechaContrato, fechaHoraInicio, fechaHoraFin, cp,
-                        cliente, agente, fase);
+                        cliente, agente, fases);
 
                 if (persistenciaFachada.registrarCasting(casting)) {
                     JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
                             "Casting", JOptionPane.INFORMATION_MESSAGE);
 
-                    fase = new Fase();
+                    fases = new ArrayList<>();
                     cp = new CastingPresencial();
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Ya existe el casting ",
+                    JOptionPane.showMessageDialog(null, "Ya existe el casting",
                             "Casting", JOptionPane.INFORMATION_MESSAGE);
                 }
 
@@ -349,12 +351,12 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                 if (co.getEnlace() != null) {
                     Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
                             fechaContrato, fechaHoraInicio, fechaHoraFin, co,
-                            cliente, agente, fase);
+                            cliente, agente, fases);
 
                     if (persistenciaFachada.registrarCasting(casting)) {
                         JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
                                 "Casting", JOptionPane.INFORMATION_MESSAGE);
-                        fase = new Fase();
+                        fases = new ArrayList<>();
                         co = new CastingOnline();
                         dispose();
                     } else {
@@ -376,19 +378,12 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
 
     private boolean validar() {
         if (txtCodigo.getText().equals("") && txtNombre.getText().equals("")
-                && txtDescripcion.getText().equals("") && txtCosto.getText().equals("")
-                && dateContrato.getText().equals("") && dateTimeInicio.getDatePicker().getText().equals("")
-                && dateTimeFin.getDatePicker().getText().equals("") && dateTimeInicio.getTimePicker().getText().equals("")
-                && dateTimeFin.getTimePicker().getText().equals("") && comboBoxClientes.getSelectedItem() == null
-                && comboBoxAgentes.getSelectedItem() == null) {
+                || txtDescripcion.getText().equals("") || txtCosto.getText().equals("")
+                || dateContrato.getText().equals("") || dateTimeInicio.getDatePicker().getText().equals("")
+                || dateTimeFin.getDatePicker().getText().equals("") || dateTimeInicio.getTimePicker().getText().equals("")
+                || dateTimeFin.getTimePicker().getText().equals("") || comboBoxClientes.getSelectedItem() == null
+                || comboBoxAgentes.getSelectedItem() == null) {
             JOptionPane.showMessageDialog(null, "Campos vacíos o inválidos, verifiquelos e intentelo de nuevo.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        fase = DlgRegistrarFase.getFase();
-        if (fase.getFechaInicio() == null) {
-            JOptionPane.showMessageDialog(null, "Llene la fase del casting!",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -439,6 +434,13 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                 || dateTimeFin.getTimePicker().getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Ingrese las horas",
                     "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        
+        fases = DlgRegistrarFase.getFase();
+        if (fases.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Llene la fase del casting!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -492,8 +494,9 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void btnRegistrarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarFaseActionPerformed
-        fase = DlgRegistrarFase.getFase();
-        new DlgRegistrarFase(fase);
+        fases = DlgRegistrarFase.getFase();
+        new DlgRegistrarFase(fases);
+        
     }//GEN-LAST:event_btnRegistrarFaseActionPerformed
 
     private void limpiar() {

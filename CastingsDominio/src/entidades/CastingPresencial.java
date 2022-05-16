@@ -26,7 +26,7 @@ public class CastingPresencial extends Casting {
 
     public CastingPresencial(int numPersonas, Sala sala, boolean aprobado, float costo, 
             String codigo, String nombre, String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, 
-            CastingPresencial castingPresencial, Cliente cliente, Agente agente, Fase fase) {
+            CastingPresencial castingPresencial, Cliente cliente, Agente agente, ArrayList<Fase> fase) {
         
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, castingPresencial, 
                 cliente, agente, fase);
@@ -37,7 +37,7 @@ public class CastingPresencial extends Casting {
 
     public CastingPresencial(int numPersonas, Sala sala, boolean aprobado, float costo, String codigo, String nombre, 
             String descripcion, Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline, 
-            Cliente cliente, Agente agente, Fase fase) {
+            Cliente cliente, Agente agente, ArrayList<Fase> fase) {
         
         super(aprobado, costo, codigo, nombre, descripcion, fechaContrato, fechaHoraInicio, fechaHoraFin, castingOnline, 
                 cliente, agente, fase);
@@ -166,11 +166,11 @@ public class CastingPresencial extends Casting {
         this.agente = agente;
     }
 
-    public Fase getFase() {
+    public ArrayList<Fase> getFase() {
         return fase;
     }
 
-    public void setFase(Fase fase) {
+    public void setFase(ArrayList<Fase> fase) {
         this.fase = fase;
     }
 

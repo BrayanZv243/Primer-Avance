@@ -59,6 +59,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
         btnGuardar.setEnabled(false);
         btnLimpiar.setEnabled(false);
         btnCancelar.setText("Salir");
+        btnRegistrarDireccion.setText("Ver Direccion Sala...");
     }
     
     private void llenarCampos() {

@@ -80,6 +80,8 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
         btnLimpiar.setEnabled(false);
         comboBoxTipoEmpresa.setEnabled(false);
         btnCancelar.setText("Salir");
+        btnRegistrarDireccion.setText("Ver Direccion...");
+        btnRegistrarContaco.setText("Ver Contacto...");
     }
     /**
      * This method is called from within the constructor to initialize the form.

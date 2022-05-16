@@ -13,7 +13,6 @@ import interfaces.IAgentesDAO;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import entidades.Agente;
-import entidades.Cliente;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;

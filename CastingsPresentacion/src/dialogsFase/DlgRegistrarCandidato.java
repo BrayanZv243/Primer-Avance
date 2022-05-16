@@ -34,8 +34,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -65,6 +63,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
     DlgLlenarPerfil dlgPerfil;
     ArrayList<Perfil> perfiles;
+    int operacion;
 
     /**
      * Creates new form DlgRegistrarCandidato
@@ -73,12 +72,30 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
      */
     public DlgRegistrarCandidato(Candidato candidato) {
         initComponents();
+        operacion = 0;
         perfiles = new ArrayList<>();
         setLocationRelativeTo(null);
         setVisible(true);
         this.candidato = candidato;
         persistencia = PersistenciaFachada.getInstance();
         llenarCampos();
+    }
+
+    public DlgRegistrarCandidato(Candidato candidato, int operacion) {
+        initComponents();
+        this.operacion = operacion;
+        perfiles = new ArrayList<>();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        this.candidato = candidato;
+        persistencia = PersistenciaFachada.getInstance();
+        llenarCampos();
+        
+        if(operacion == 1){
+            desactivarCampos();
+        }
+        
+
     }
 
     private void llenarCampos() {
@@ -147,6 +164,25 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         } else {
             contacto = new Contacto();
         }
+    }
+
+    private void desactivarCampos() {
+        comboBoxCandidato.setEnabled(false);
+        txtNombre.setEditable(false);
+        txtTelefono.setEditable(false);
+        txtCurp.setEditable(false);
+        txtRFC.setEditable(false);
+        txtCodigo.setEditable(false);
+        dateFechaNacimiento.setEnabled(false);
+        aprobadoCheckBox.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+        btnCancelar.setText("Salir");
+        btnEscogerFotografia.setEnabled(false);
+        btnRegistrarDireccion.setText("Ver Dirección...");
+        btnRegistrarContacto.setText("Ver Contacto...");
+        btnRegistrarRepresentante.setText("Ver Contacto...");
+        btnRegistrarPerfil.setText("Ver Perfil...");
     }
 
     /**
@@ -402,9 +438,9 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblRFC)
                             .addComponent(txtRFC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRegistrarDireccion)
-                        .addGap(18, 18, 18)
+                        .addGap(12, 12, 12)
                         .addComponent(btnRegistrarContacto)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -464,8 +500,10 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
     }//GEN-LAST:event_comboBoxCandidatoItemStateChanged
 
     private void btnRegistrarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil(perfiles, null);
+        
+        dlgPerfil = new DlgLlenarPerfil(perfiles, operacion);
         perfiles = dlgPerfil.getPerfil();
+        
     }//GEN-LAST:event_btnRegistrarPerfilActionPerformed
 
     private void aprobadoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aprobadoCheckBoxActionPerformed
@@ -481,16 +519,16 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        dlgDireccion = new DlgDireccion(direccion);
+        dlgDireccion = new DlgDireccion(direccion, operacion);
         direccion = dlgDireccion.getDireccion();
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
     private void btnRegistrarContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarContactoActionPerformed
-        dlgContacto = new DlgRegistrarContacto(contacto);
+        dlgContacto = new DlgRegistrarContacto(contacto, operacion);
     }//GEN-LAST:event_btnRegistrarContactoActionPerformed
 
     private void btnRegistrarRepresentanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRepresentanteActionPerformed
-        dlgRepresentante = new DlgRegistrarContacto(representante);
+        dlgRepresentante = new DlgRegistrarContacto(representante, operacion);
 
     }//GEN-LAST:event_btnRegistrarRepresentanteActionPerformed
 
@@ -602,7 +640,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
         if (casting != null) {
             for (int i = 0; i < casting.size(); i++) {
-                if (casting.get(i).getFase().getCandidato().getCodigo().equals(txtCodigo.getText())) {
+                if (casting.get(i).getFase().get(i).getCandidato().getCodigo().equals(txtCodigo.getText())) {
                     JOptionPane.showMessageDialog(null, "El código de candidato ya existe!");
                     return false;
                 }

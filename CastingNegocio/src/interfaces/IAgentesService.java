@@ -16,8 +16,7 @@ public interface IAgentesService {
     
     public boolean registrarAgente(Agente agente);
     public List<Agente> buscarAgentes();
-    public boolean eliminarAgente(String codigo);
-    public boolean actualizarAgente(Agente agente);
+    public Agente buscarAgentePorCodigo(int codigo);
     public boolean validar(int codigo);
     
 }

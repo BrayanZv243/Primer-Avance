@@ -14,6 +14,7 @@ import interfaces.*;
 import java.util.List;
 import dlgcompartidos.DlgLlenarPerfil;
 import entidades.Agente;
+import entidades.Casting;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -192,7 +193,14 @@ public class CastingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void opcionMenuBuscarCastingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuBuscarCastingActionPerformed
-        new DlgBuscarCasting();
+        List<Casting> castings = persistencia.buscarCastings();
+        if(castings != null && !castings.isEmpty()){
+            new DlgBuscarCasting();
+        } else {
+            JOptionPane.showMessageDialog(null, "Aún no hay castings registrados que buscar!",
+                    "Perfil", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
     }//GEN-LAST:event_opcionMenuBuscarCastingActionPerformed
 
 

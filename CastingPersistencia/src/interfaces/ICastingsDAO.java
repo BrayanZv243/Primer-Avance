@@ -10,7 +10,7 @@ public interface ICastingsDAO {
     
     public boolean registrarCasting(Casting casting);
     public Casting buscarCastingPorCodigo(String codigo);
-    public List<Casting> buscarCastingPorNombre(String nombre);
+    public Casting buscarCastingPorNombre(String nombre);
     public List<Casting> buscarCastingPorFecha(Date fecha);
     public List<Casting> buscarCastings();
     public boolean actualizarCasting(Casting casting);

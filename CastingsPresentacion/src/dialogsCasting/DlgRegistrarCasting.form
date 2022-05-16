@@ -322,7 +322,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRegistrarFase">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Registrar Fase"/>
+        <Property name="text" type="java.lang.String" value="Registrar Fases"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarFaseActionPerformed"/>

@@ -27,6 +27,7 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
 
     static Prueba prueba;
     Direccion direccion = new Direccion();
+    int operacion;
 
     /**
      * Creates new form DlgRegistrarPrueba
@@ -37,8 +38,24 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         initComponents();
         setVisible(true);
         setLocationRelativeTo(null);
+        operacion = 0;
         this.prueba = prueba;
         llenarCampos();
+    }
+    
+    public DlgRegistrarPrueba(Prueba prueba, int operacion) {
+        initComponents();
+        setVisible(true);
+        setLocationRelativeTo(null);
+        this.prueba = prueba;
+        this.operacion = operacion;
+        llenarCampos();
+        if(operacion == 1){
+            desactivarCampos();
+        }
+        
+        
+        
     }
 
     private void llenarCampos(){
@@ -58,6 +75,17 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         }
     }
     
+    
+    private void desactivarCampos(){
+        dateFecha.setEnabled(false);
+        aprobadoCheckBox.setEnabled(false);
+        txtNombreSala.setEditable(false);
+        txtDescripcionSala.setEditable(false);
+        btnLimpiar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnCancelar.setText("Salir");
+        btnRegistrarDireccion.setText("Ver Dirección Sala...");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -235,7 +263,7 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        new DlgDireccion(direccion);
+        new DlgDireccion(direccion,operacion);
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
     private void limpiar() {

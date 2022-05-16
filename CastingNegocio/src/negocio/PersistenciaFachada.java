@@ -79,7 +79,7 @@ public class PersistenciaFachada implements IPersistenciaFachada {
     }
     
     @Override
-    public List<Casting> buscarCastingPorNombre(String nombre) {
+    public Casting buscarCastingPorNombre(String nombre) {
         return castingsBO.buscarCastingPorNombre(nombre);
     }
     

@@ -67,6 +67,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
         btnLimpiar.setEnabled(false);
         btnGuardar.setEnabled(false);
         btnCancelar.setText("Salir");
+        btnRegistrarDireccion.setText("Ver Direccion...");
     }
     
 

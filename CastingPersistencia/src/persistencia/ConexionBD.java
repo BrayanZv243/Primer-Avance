@@ -48,8 +48,6 @@ public class ConexionBD implements IConexionBD {
             return null;
         }
     }
-
-    
     
     @Override
     public MongoDatabase obtenerConexion() {

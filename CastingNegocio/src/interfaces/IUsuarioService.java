@@ -5,8 +5,6 @@
  */
 package interfaces;
 
-import entidades.Casting;
-import entidades.Cliente;
 import entidades.Usuario;
 import java.util.List;
 
@@ -17,6 +15,5 @@ import java.util.List;
 public interface IUsuarioService {
 
     public boolean registrarUsuario(Usuario usuario);
-
     public List<Usuario> buscarUsuarios();
 }

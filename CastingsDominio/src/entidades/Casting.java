@@ -23,14 +23,14 @@ public class Casting {
     ArrayList<Perfil> perfiles;
     Cliente cliente;
     Agente agente;
-    Fase fase;
+    ArrayList<Fase> fase;
 
     public Casting() {
     }
 
     public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion,
             Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingPresencial castingPresencial,
-            Cliente cliente, Agente agente, Fase fase) {
+            Cliente cliente, Agente agente, ArrayList<Fase> fase) {
         this.aprobado = aprobado;
         this.costo = costo;
         this.codigo = codigo;
@@ -47,7 +47,7 @@ public class Casting {
 
     public Casting(boolean aprobado, float costo, String codigo, String nombre, String descripcion,
             Date fechaContrato, Date fechaHoraInicio, Date fechaHoraFin, CastingOnline castingOnline,
-            Cliente cliente, Agente agente, Fase fase) {
+            Cliente cliente, Agente agente, ArrayList<Fase> fase) {
         this.aprobado = aprobado;
         this.costo = costo;
         this.codigo = codigo;
@@ -166,11 +166,11 @@ public class Casting {
         this.agente = agente;
     }
 
-    public Fase getFase() {
+    public ArrayList<Fase> getFase() {
         return fase;
     }
 
-    public void setFase(Fase fase) {
+    public void setFase(ArrayList<Fase> fase) {
         this.fase = fase;
     }
 

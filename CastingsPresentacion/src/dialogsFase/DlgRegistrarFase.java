@@ -8,15 +8,23 @@ package dialogsFase;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import entidades.Candidato;
+import entidades.Casting;
 import entidades.Fase;
 import entidades.Prueba;
+import interfaces.IPersistencia;
+import interfaces.IPersistenciaFachada;
+import java.awt.HeadlessException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import negocio.PersistenciaFachada;
 
 /**
  *
@@ -24,21 +32,52 @@ import javax.swing.JOptionPane;
  */
 public class DlgRegistrarFase extends javax.swing.JDialog {
 
-    static Fase fase;
+    static ArrayList<Fase> fases;
     Date fechaInicio;
     Date fechaFin;
     Prueba prueba;
     Candidato candidato;
+    int operacion;
+    IPersistenciaFachada persistencia;
 
-    public DlgRegistrarFase(Fase fase) {
+    public DlgRegistrarFase(ArrayList<Fase> fase) {
         initComponents();
-        this.fase = fase;
-        llenarCampos();
+        this.fases = fase;
+        operacion = 0;
+        llenarTabla(fases);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        prueba = new Prueba();
+        candidato = new Candidato();
+        persistencia = PersistenciaFachada.getInstance();
+    }
+
+    public DlgRegistrarFase(ArrayList<Fase> fase, int operacion) {
+        initComponents();
+        this.fases = fase;
+        this.operacion = operacion;
+        prueba = new Prueba();
+        candidato = new Candidato();
+        llenarTabla(fases);
+        desactivarCampos();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     private void llenarCampos() {
+        try {
+            if (tblFases.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Fase fase = (Fase) fases.get(tblFases.getSelectedRow());
+
         if (fase.getFechaFin() != null && fase.getFechaInicio() != null) {
             LocalDate localDateInicio = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaInicio()));
             LocalDate localDateFin = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(fase.getFechaFin()));
@@ -64,6 +103,21 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         }
     }
 
+    private void desactivarCampos() {
+        datePicker1.setEnabled(false);
+        datePicker2.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+        btnRegistrarCandidato.setText("Ver Candidato...");
+        btnPrueba.setText("Ver Prueba...");
+        btnRegistrarCandidato.setEnabled(false);
+        btnPrueba.setEnabled(false);
+        btnCancelar.setText("Salir");
+        btnEliminarFila.setEnabled(false);
+        btnInsertarFase.setEnabled(false);
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,6 +136,10 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnRegistrarCandidato = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblFases = new javax.swing.JTable();
+        btnEliminarFila = new javax.swing.JButton();
+        btnInsertarFase = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Fase");
@@ -126,67 +184,134 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             }
         });
 
+        tblFases.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "F. Inicio", "F. Fin", "Candidato", "Prueba"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblFases.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblFasesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblFases);
+
+        btnEliminarFila.setText("Eliminar");
+        btnEliminarFila.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarFilaActionPerformed(evt);
+            }
+        });
+
+        btnInsertarFase.setText("Insertar Fase");
+        btnInsertarFase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarFaseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(121, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnPrueba, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRegistrarCandidato, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
-                .addGap(162, 162, 162))
+                        .addGap(0, 6, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(111, 111, 111)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnPrueba, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnRegistrarCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(btnInsertarFase, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(302, 302, 302)
+                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEliminarFila, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
-                .addComponent(btnRegistrarCandidato)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnEliminarFila)
+                        .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnRegistrarCandidato)
+                        .addGap(18, 18, 18)))
                 .addComponent(btnPrueba)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInsertarFase)
+                    .addComponent(btnGuardar))
+                .addGap(22, 22, 22))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
-        prueba = DlgRegistrarPrueba.getPrueba();
-        new DlgRegistrarPrueba(prueba);
+        if (tblFases.getSelectedRow() != -1) {
+            prueba = fases.get(tblFases.getSelectedRow()).getPrueba();
+            new DlgRegistrarPrueba(prueba, 1);
+            return;
+
+        }
+        new DlgRegistrarPrueba(new Prueba(), operacion);
 
     }//GEN-LAST:event_btnPruebaActionPerformed
 
@@ -195,32 +320,42 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCandidatoActionPerformed
-        candidato = DlgRegistrarCandidato.getCandidato();
-        new DlgRegistrarCandidato(candidato);
+
+        if (tblFases.getSelectedRow() != -1) {
+            candidato = fases.get(tblFases.getSelectedRow()).getCandidato();
+            new DlgRegistrarCandidato(candidato, 1);
+
+            return;
+        }
+        new DlgRegistrarCandidato(new Candidato(), operacion);
 
     }//GEN-LAST:event_btnRegistrarCandidatoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (!validacion()) {
+        if (fases.size() < 2) {
+            JOptionPane.showMessageDialog(null, "Necesita llenar al menos 2 fases!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        fase = new Fase(fechaInicio, fechaFin, candidato, prueba);
-        JOptionPane.showMessageDialog(null, "Fase guardada correctamente",
-                        "Fase", JOptionPane.INFORMATION_MESSAGE);
+
+        JOptionPane.showMessageDialog(null, "Fases guardadas correctamente",
+                "Fase", JOptionPane.INFORMATION_MESSAGE);
         dispose();
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    public static Fase getFase() {
-        if (fase == null) {
-            return new Fase();
+    public static ArrayList<Fase> getFase() {
+        if (fases == null) {
+            return new ArrayList<>();
         }
-        return fase;
+        return fases;
     }
 
     private boolean validacion() {
+
         candidato = DlgRegistrarCandidato.getCandidato();
         prueba = DlgRegistrarPrueba.getPrueba();
+
         try {
             if (datePicker1.getText().equals("") || datePicker2.getText().equals("")
                     || candidato.getCodigo() == null
@@ -250,17 +385,110 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             return false;
         }
 
+        List<Casting> casting = persistencia.buscarCastings();
+        for (int i = 0; i < casting.size(); i++) {
+            if (casting.get(i).getFase().get(i).getFechaInicio().equals(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "Ya existe una fase en la fecha especificada!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            if (fases.get(i).getFechaInicio().equals(fechaInicio)) {
+                JOptionPane.showMessageDialog(null, "Ya existe una fase en la fecha especificada!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
         return true;
 
     }
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         limpiar();
+        candidato = new Candidato();
+        prueba = new Prueba();
+        btnInsertarFase.setEnabled(true);
+        btnPrueba.setText("Registrar Prueba");
+        btnRegistrarCandidato.setText("Registrar Candidato");
+        llenarTabla(fases);
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnInsertarFaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarFaseActionPerformed
+        if (!validacion()) {
+            return;
+        }
+
+        Fase fase = new Fase(fechaInicio, fechaFin, candidato, prueba);
+        fases.add(fase);
+
+        llenarTabla(fases);
+        limpiar();
+        JOptionPane.showMessageDialog(null, "Fase Insertada con éxito!",
+                "Fases", JOptionPane.INFORMATION_MESSAGE);
+        candidato = new Candidato();
+        prueba = new Prueba();
+    }//GEN-LAST:event_btnInsertarFaseActionPerformed
+
+    private void btnEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFilaActionPerformed
+
+        DefaultTableModel modelFases = (DefaultTableModel) tblFases.getModel();
+        try {
+            if (tblFases.getSelectedRow() != -1) {
+                int res = JOptionPane.showConfirmDialog(null,
+                        "¿Está seguro de que desea borrar la fase?", "Elminar Fase", JOptionPane.WARNING_MESSAGE);
+                if (res != 0) {
+                    return;
+                }
+                fases.remove(tblFases.getSelectedRow());
+
+                modelFases.removeRow(tblFases.getSelectedRow());
+                limpiar();
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Seleccione un campo para eliminar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarFilaActionPerformed
+
+    private void tblFasesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFasesMouseClicked
+        llenarCampos();
+        btnInsertarFase.setEnabled(false);
+        btnPrueba.setText("Ver Prueba...");
+        btnRegistrarCandidato.setText("Ver Candidato...");
+        btnRegistrarCandidato.setEnabled(true);
+        btnPrueba.setEnabled(true);
+    }//GEN-LAST:event_tblFasesMouseClicked
+
+    private void llenarTabla(ArrayList<Fase> fases) {
+        DefaultTableModel modelFases = (DefaultTableModel) tblFases.getModel();
+
+        int rowCountClientes = tblFases.getRowCount();
+
+        for (int i = rowCountClientes - 1; i >= 0; i--) {
+            modelFases.removeRow(i);
+        }
+
+        Object rowDataFases[] = new Object[4];
+        if (fases != null) {
+            for (int i = 0; i < fases.size(); i++) {
+
+                rowDataFases[0] = fases.get(i).getFechaInicio().toGMTString();
+                rowDataFases[1] = fases.get(i).getFechaFin().toGMTString();
+                rowDataFases[2] = fases.get(i).getCandidato().getCodigo();
+                rowDataFases[3] = fases.get(i).getPrueba().getSala().getNombre();
+                modelFases.addRow(rowDataFases);
+            }
+
+        }
+    }
 
     private void limpiar() {
         datePicker1.setText("");
-        datePicker1.setText("");
+        datePicker2.setText("");
     }
 
     public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
@@ -290,7 +518,9 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminarFila;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnInsertarFase;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnPrueba;
     private javax.swing.JButton btnRegistrarCandidato;
@@ -298,5 +528,7 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
     private com.github.lgooddatepicker.components.DatePicker datePicker2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblFases;
     // End of variables declaration//GEN-END:variables
 }
