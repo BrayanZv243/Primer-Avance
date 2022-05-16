@@ -6,6 +6,7 @@ package entidades;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class Casting {
 
@@ -175,12 +176,91 @@ public class Casting {
 
     @Override
     public String toString() {
-        String toString = "Nombre Cliente: " + nombre + "  -Nombre Agente: " + agente.getNombre();
+        String toString = "-Cliente: " + nombre + "  -Agente: " + agente.getNombre();
         String resultado = castingPresencial != null ? "  -Tipo: Presencial" : "  -Tipo: Online";
 
         toString += resultado;
 
         return toString;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + (this.aprobado ? 1 : 0);
+        hash = 83 * hash + Float.floatToIntBits(this.costo);
+        hash = 83 * hash + Objects.hashCode(this.codigo);
+        hash = 83 * hash + Objects.hashCode(this.nombre);
+        hash = 83 * hash + Objects.hashCode(this.descripcion);
+        hash = 83 * hash + Objects.hashCode(this.fechaContrato);
+        hash = 83 * hash + Objects.hashCode(this.fechaHoraInicio);
+        hash = 83 * hash + Objects.hashCode(this.fechaHoraFin);
+        hash = 83 * hash + Objects.hashCode(this.castingOnline);
+        hash = 83 * hash + Objects.hashCode(this.castingPresencial);
+        hash = 83 * hash + Objects.hashCode(this.perfiles);
+        hash = 83 * hash + Objects.hashCode(this.cliente);
+        hash = 83 * hash + Objects.hashCode(this.agente);
+        hash = 83 * hash + Objects.hashCode(this.fase);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Casting other = (Casting) obj;
+        if (this.aprobado != other.aprobado) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.costo) != Float.floatToIntBits(other.costo)) {
+            return false;
+        }
+        if (!Objects.equals(this.codigo, other.codigo)) {
+            return false;
+        }
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.descripcion, other.descripcion)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaContrato, other.fechaContrato)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaHoraInicio, other.fechaHoraInicio)) {
+            return false;
+        }
+        if (!Objects.equals(this.fechaHoraFin, other.fechaHoraFin)) {
+            return false;
+        }
+        if (!Objects.equals(this.castingOnline, other.castingOnline)) {
+            return false;
+        }
+        if (!Objects.equals(this.castingPresencial, other.castingPresencial)) {
+            return false;
+        }
+        if (!Objects.equals(this.perfiles, other.perfiles)) {
+            return false;
+        }
+        if (!Objects.equals(this.cliente, other.cliente)) {
+            return false;
+        }
+        if (!Objects.equals(this.agente, other.agente)) {
+            return false;
+        }
+        if (!Objects.equals(this.fase, other.fase)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

@@ -23,6 +23,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
     DlgDireccion dlgDireccion;
     static CastingPresencial castingPresencial;
     static CastingOnline castingOnline;
+    int operacion;
 
     /**
      * Creates new form SeleccionarModalidad
@@ -31,12 +32,35 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
         initComponents();
         this.castingPresencial = cp;
         this.castingOnline = co;
+        operacion = 0;
         llenarCampos();
         setLocationRelativeTo(null);
         setVisible(true);
-
     }
-
+    
+    public DlgSeleccionarModalidad(CastingPresencial cp, CastingOnline co, int operacion) {
+        initComponents();
+        this.castingPresencial = cp;
+        this.castingOnline = co;
+        this.operacion = 1;
+        llenarCampos();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        desactivarCampos();
+    }
+    
+    private void desactivarCampos(){
+        comboBoxModalidad.setEnabled(false);
+        spinnerNumPersonasOnline.setEnabled(false);
+        txtNombreSala.setEditable(false);
+        txtDescripcionSala.setEditable(false);
+        spinnerNumPersonasOnline.setEnabled(false);
+        txtOnlineEnlace.setEditable(false);
+        btnGuardar.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+        btnCancelar.setText("Salir");
+    }
+    
     private void llenarCampos() {
         SpinnerNumberModel modeloSpinnerPresencial = new SpinnerNumberModel();
         SpinnerNumberModel modeloSpinnerOnline = new SpinnerNumberModel();
@@ -49,16 +73,19 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
         txtOnlineEnlace.setEnabled(false);
 
         spinnerNumPersonasOnline.setModel(modeloSpinnerOnline);
+        spinnerNumPersonasOnline.setValue(1);
+        
         spinnerNumPersonasPresencial.setModel(modeloSpinnerPresencial);
         spinnerNumPersonasPresencial.setValue(1);
-        spinnerNumPersonasOnline.setValue(1);
+        
 
         if (castingPresencial.getSala() != null) {
             spinnerNumPersonasPresencial.setValue(castingPresencial.getNumPersonas());
             direccion = castingPresencial.getSala().getDireccion();
             txtNombreSala.setText(castingPresencial.getSala().getNombre());
             txtDescripcionSala.setText(castingPresencial.getSala().getDescripcion());
-        } else if (castingOnline != null) {
+        } else if (castingOnline.getAsistente() != 0) {
+            comboBoxModalidad.setSelectedIndex(1);
             spinnerNumPersonasOnline.setValue(castingOnline.getAsistente());
             txtOnlineEnlace.setText(castingOnline.getEnlace());
         }
@@ -333,7 +360,7 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
 
-        dlgDireccion = new DlgDireccion(direccion);
+        dlgDireccion = new DlgDireccion(direccion,operacion);
 
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
@@ -351,13 +378,19 @@ public class DlgSeleccionarModalidad extends javax.swing.JDialog {
             String nombre = txtNombreSala.getText();
             Sala sala = new Sala(nombre, direccion, descripcion);
             castingPresencial = new CastingPresencial(numPersonas, sala);
-
+            castingOnline = new CastingOnline();
+            JOptionPane.showMessageDialog(null, "Casting Presencial registrado correctamente",
+                        "Modalidad", JOptionPane.INFORMATION_MESSAGE);
         } else {
             int numPersonas = (int) spinnerNumPersonasOnline.getValue();
             String enlace = txtOnlineEnlace.getText();
             castingOnline = new CastingOnline(enlace, numPersonas);
-
+            castingPresencial = new CastingPresencial();
+            JOptionPane.showMessageDialog(null, "Casting Online registrado correctamente",
+                        "Modalidad", JOptionPane.INFORMATION_MESSAGE);
+            
         }
+        
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 

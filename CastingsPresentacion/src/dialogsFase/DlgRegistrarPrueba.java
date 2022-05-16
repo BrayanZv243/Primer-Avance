@@ -218,7 +218,8 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         prueba.getSala().setDescripcion(txtDescripcionSala.getText());
         prueba.getSala().setDireccion(direccion);
         
-        
+        JOptionPane.showMessageDialog(null, "Prueba registrada correctamente",
+                        "Error", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 

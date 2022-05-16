@@ -6,13 +6,11 @@
 
 package negocio;
 
-import persistencia.ClientesDAO;
 import entidades.Cliente;
 import factory.DAOSFactory;
 import interfaces.IClientesDAO;
 import interfaces.IClientesService;
 import java.util.List;
-import persistencia.ConexionBD;
 
 
 /**
@@ -25,7 +23,7 @@ public class ClientesService implements IClientesService{
     
     @Override
     public boolean registrarCliente(Cliente cliente) {
-        if(validar()){
+        if(validar(cliente.getCodigo())){
             clientesDAO.registrarCliente(cliente);
             return true;
         } else {
@@ -39,18 +37,16 @@ public class ClientesService implements IClientesService{
     }
 
     @Override
-    public boolean eliminarCliente(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Cliente buscarClientePorCodigo(String codigo) {
+        return clientesDAO.buscarClientePorCodigo(codigo);
     }
 
     @Override
-    public boolean actualizarCliente(Cliente cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean validar(String codigo) {
+        Cliente cliente = clientesDAO.buscarClientePorCodigo(codigo);
+        
+        return cliente == null;
     }
 
-    @Override
-    public boolean validar() {
-        return true;
-    }
-
+   
 }

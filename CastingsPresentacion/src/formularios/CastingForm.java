@@ -6,6 +6,7 @@
 package formularios;
 
 import dialogsAgente.DlgRegistrarAgente;
+import dialogsCasting.DlgBuscarCasting;
 import dialogsCasting.DlgRegistrarCasting;
 import dialogsCliente.DlgRegistrarCliente;
 import entidades.Cliente;
@@ -34,6 +35,7 @@ public class CastingForm extends javax.swing.JFrame {
         perfiles = new ArrayList<>();
         initComponents();
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     /**
@@ -104,6 +106,11 @@ public class CastingForm extends javax.swing.JFrame {
         jMenu1.add(opcionMenuAgregarCasting);
 
         opcionMenuBuscarCasting.setText("Buscar Casting");
+        opcionMenuBuscarCasting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcionMenuBuscarCastingActionPerformed(evt);
+            }
+        });
         jMenu1.add(opcionMenuBuscarCasting);
 
         jMenuItem1.setText("Registrar Perfil");
@@ -159,8 +166,10 @@ public class CastingForm extends javax.swing.JFrame {
     private void opcionMenuAgregarCastingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuAgregarCastingActionPerformed
         DefaultComboBoxModel clientes = conversiones.clientesComboBoxModel(persistencia.buscarClientes());
         DefaultComboBoxModel agentes = conversiones.agentesComboBoxModel(persistencia.buscarAgentes());
-
-        new DlgRegistrarCasting(clientes, agentes);
+        
+        if(clientes != null && agentes!= null) new DlgRegistrarCasting(clientes, agentes);
+        else JOptionPane.showMessageDialog(null, "Necesita agregar minimo un cliente o agente para agregar un Casting!",
+                    "Casting", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_opcionMenuAgregarCastingActionPerformed
 
     private void opcionMenuAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuAgregarClienteActionPerformed
@@ -181,6 +190,10 @@ public class CastingForm extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void opcionMenuBuscarCastingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionMenuBuscarCastingActionPerformed
+        new DlgBuscarCasting();
+    }//GEN-LAST:event_opcionMenuBuscarCastingActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

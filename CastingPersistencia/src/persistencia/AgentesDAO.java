@@ -13,8 +13,10 @@ import interfaces.IAgentesDAO;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import entidades.Agente;
+import entidades.Cliente;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 
 /**
  * 
@@ -50,14 +52,19 @@ public class AgentesDAO implements IAgentesDAO{
         return agentes;
     }
 
-    @Override
-    public boolean eliminarAgente(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
     @Override
-    public boolean actualizarAgente(Agente agente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Agente buscarAgentePorCodigo(int codigo) {
+
+         List<Agente> agente = baseDatos.getCollection("agentes", Agente.class).find(new Document()
+                .append("numEmpleado", codigo)).into(new ArrayList());
+        
+        if (agente.isEmpty()) {
+            return null;
+        }
+        return agente.get(0);
+
     }
     
     

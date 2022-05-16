@@ -12,11 +12,13 @@ import dlgcompartidos.DlgLlenarPerfil;
 import dlgcompartidos.DlgRegistrarContacto;
 import entidades.Adulto;
 import entidades.Candidato;
+import entidades.Casting;
 import entidades.Contacto;
 import entidades.Direccion;
 import entidades.Niño;
 import entidades.Perfil;
 import entidades.Representante;
+import interfaces.IPersistenciaFachada;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -29,13 +31,18 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import negocio.PersistenciaFachada;
 
 /**
  *
@@ -45,6 +52,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
 
     ImageIcon image;
     static Candidato candidato;
+    IPersistenciaFachada persistencia;
 
     Direccion direccion = new Direccion();
     DlgDireccion dlgDireccion;
@@ -69,7 +77,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.candidato = candidato;
-
+        persistencia = PersistenciaFachada.getInstance();
         llenarCampos();
     }
 
@@ -80,6 +88,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         txtNombre.setText(candidato.getNombre());
         txtRFC.setText(candidato.getRfc());
         txtTelefono.setText(candidato.getTelefono());
+        comboBoxCandidato.setSelectedItem(this);
 
         if (candidato.getFechaNacimiento() != null) {
             LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(candidato.getFechaNacimiento()));
@@ -108,6 +117,13 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         }
 
         aprobadoCheckBox.setSelected(candidato.isAprobado());
+
+        if (candidato instanceof Adulto) {
+            comboBoxCandidato.setSelectedIndex(0);
+        } else if (candidato instanceof Niño) {
+            comboBoxCandidato.setSelectedIndex(1);
+        }
+
         if (candidato.getDireccion() != null) {
             direccion = candidato.getDireccion();
         } else {
@@ -448,7 +464,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
     }//GEN-LAST:event_comboBoxCandidatoItemStateChanged
 
     private void btnRegistrarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPerfilActionPerformed
-        dlgPerfil = new DlgLlenarPerfil(perfiles,null);
+        dlgPerfil = new DlgLlenarPerfil(perfiles, null);
         perfiles = dlgPerfil.getPerfil();
     }//GEN-LAST:event_btnRegistrarPerfilActionPerformed
 
@@ -506,11 +522,19 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             String telefono = txtTelefono.getText();
             String codigo = txtCodigo.getText();
             boolean aprobado = aprobadoCheckBox.isSelected();
-            Date fechaNacimiento = toDate(null, dateFechaNacimiento);
+            Date fechaNacimiento = null;
+            try {
+                fechaNacimiento = toDate(null, dateFechaNacimiento);
+            } catch (Exception ex) {
+
+            }
 
             Adulto adulto = new Adulto(codigo, contacto, fechaNacimiento,
                     candidato.getFotografia(), representante, perfiles, aprobado, nombre, telefono, curp, rfc, direccion);
             candidato = adulto;
+            JOptionPane.showMessageDialog(null, "Adulto registrado correctamente",
+                    "Candidato", JOptionPane.INFORMATION_MESSAGE);
+
             dispose();
         } else {
             String nombre = txtNombre.getText();
@@ -518,11 +542,19 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             String telefono = txtTelefono.getText();
             String codigo = txtCodigo.getText();
             boolean aprobado = aprobadoCheckBox.isSelected();
-            Date fechaNacimiento = toDate(null, dateFechaNacimiento);
+
+            Date fechaNacimiento = null;
+            try {
+                fechaNacimiento = toDate(null, dateFechaNacimiento);
+            } catch (Exception ex) {
+
+            }
 
             Niño niño = new Niño(codigo, contacto, fechaNacimiento,
                     candidato.getFotografia(), representante, perfiles, aprobado, nombre, telefono, curp, direccion);
             candidato = niño;
+            JOptionPane.showMessageDialog(null, "Niño registrado correctamente",
+                    "Candidato", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         }
 
@@ -566,10 +598,46 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
             return false;
         }
 
+        List<Casting> casting = persistencia.buscarCastings();
+
+        if (casting != null) {
+            for (int i = 0; i < casting.size(); i++) {
+                if (casting.get(i).getFase().getCandidato().getCodigo().equals(txtCodigo.getText())) {
+                    JOptionPane.showMessageDialog(null, "El código de candidato ya existe!");
+                    return false;
+                }
+            }
+        }
+
+        Date fechaN = null;
+        try {
+            fechaN = toDate(null, dateFechaNacimiento);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Ingrese una fecha válida");
+            return false;
+        }
+        Date date = new Date();
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(date);
+        c1.add(Calendar.YEAR, -18);
+        c1.setTime(date);
+        c1.add(Calendar.YEAR, -18);
+        if (comboBoxCandidato.getSelectedIndex() == 0) {
+            if (fechaN.getTime() >= c1.getTime().getTime()) {
+                JOptionPane.showMessageDialog(null, "Ingrese una fecha válida para un adulto!");
+                return false;
+            }
+        } else {
+            if (fechaN.getTime() <= c1.getTime().getTime()) {
+                JOptionPane.showMessageDialog(null, "Ingrese una fecha válida para un niño!");
+                return false;
+            }
+        }
+
         return true;
     }
 
-    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) {
+    public Date toDate(DateTimePicker dateTimePicker, DatePicker datePicker) throws Exception {
         ZoneId defaultZoneId = ZoneId.systemDefault();
 
         if (dateTimePicker != null) {

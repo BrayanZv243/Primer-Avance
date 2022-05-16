@@ -8,6 +8,8 @@ package interfaces;
 import entidades.Agente;
 import entidades.Casting;
 import entidades.Cliente;
+import entidades.Usuario;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +27,13 @@ public interface IPersistenciaFachada {
     
     
     public boolean registrarCasting(Casting casting);
-    public boolean buscarCastingPorCodigo(String codigo);
+    public Casting buscarCastingPorCodigo(String codigo);
+    public List<Casting> buscarCastingPorNombre(String nombre);
+    public List<Casting> buscarCastingPorFecha(Date fecha);
     public List<Casting> buscarCastings();
     public boolean actualizarCasting(Casting casting);
+    
+    public boolean registrarUsuario(Usuario usuario);
+    public List<Usuario> buscarUsuarios();
     
 }

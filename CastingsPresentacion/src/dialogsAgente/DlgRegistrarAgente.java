@@ -25,18 +25,50 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
     Direccion direccion = new Direccion();
     Agente agente = new Agente();
     IPersistenciaFachada persistencia;
-
+    int operacion;
     DlgDireccion dlgDireccion;
 
     /**
      * Creates new form DlgAgente
+     * @param agente
      */
     public DlgRegistrarAgente() {
         persistencia = PersistenciaFachada.getInstance();
+        operacion = 0;
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    public DlgRegistrarAgente(Agente agente, int operacion) {
+        this.agente = agente;
+        this.direccion = agente.getDireccion();
+        this.operacion = 1;
+        initComponents();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        llenarCampos();
+        desactivarCampos();
+    }
+    
+    private void llenarCampos(){
+        txtNumEmpleados.setText(String.valueOf(agente.getNumEmpleado()));
+        txtCurp.setText(agente.getCurp());
+        txtNombre.setText(agente.getNombre());
+        txtRFC.setText(agente.getRfc());
+        txtTelefono.setText(agente.getTelefono());
+    }
+    
+    private void desactivarCampos(){
+        txtCurp.setEditable(false);
+        txtNombre.setEditable(false);
+        txtNumEmpleados.setEditable(false);
+        txtRFC.setEditable(false);
+        txtTelefono.setEditable(false);
+        btnLimpiar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnCancelar.setText("Salir");
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,7 +113,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setText("Num. Empleados:");
+        jLabel3.setText("Num. Empleado:");
 
         jLabel4.setText("Curp:");
 
@@ -229,9 +261,7 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCurpActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        DlgDireccion dlgDireccion = new DlgDireccion(direccion);
-
-        direccion = dlgDireccion.getDireccion();
+        new DlgDireccion(direccion, operacion);
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -243,14 +273,19 @@ public class DlgRegistrarAgente extends javax.swing.JDialog {
 
             agente = new Agente(numEmpleados, nombre, telefono, RFC, RFC, direccion);
             try {
-                persistencia.registrarAgente(agente);
+                if(persistencia.registrarAgente(agente)){
+                    
                 JOptionPane.showMessageDialog(null, "Agente guardado con éxito");
+                 dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null, "El Agente ya existe");
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error al guardar "+e.getMessage());
             }
 
             
-            dispose();
+           
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

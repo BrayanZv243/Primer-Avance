@@ -16,8 +16,7 @@ public interface IClientesService {
     
     public boolean registrarCliente(Cliente cliente);
     public List<Cliente> buscarClientes();
-    public boolean eliminarCliente(String codigo);
-    public boolean actualizarCliente(Cliente cliente);
-    public boolean validar();
+    public Cliente buscarClientePorCodigo(String codigo);
+    public boolean validar(String codigo);
     
 }

@@ -12,8 +12,11 @@ import interfaces.IClientesService;
 import interfaces.IPersistenciaFachada;
 import java.util.List;
 import BOSFactory.BOSFactory;
+import entidades.Usuario;
 import interfaces.IAgentesService;
 import interfaces.ICastingsService;
+import interfaces.IUsuarioService;
+import java.util.Date;
 
 /**
  *
@@ -24,13 +27,14 @@ public class PersistenciaFachada implements IPersistenciaFachada {
     IClientesService clientesBO;
     IAgentesService agentesBO;
     ICastingsService castingsBO;
-
+    IUsuarioService usuariosBO;
     private static PersistenciaFachada persistencia;
 
     public PersistenciaFachada() {
         clientesBO = BOSFactory.crearClientesService();
         agentesBO = BOSFactory.crearAgentesService();
         castingsBO = BOSFactory.crearCastingsService();
+        usuariosBO = BOSFactory.crearUsuariosService();
     }
 
     public static PersistenciaFachada getInstance() {
@@ -39,7 +43,6 @@ public class PersistenciaFachada implements IPersistenciaFachada {
         }
         return persistencia;
     }
-    
 
     @Override
     public boolean registrarCliente(Cliente cliente) {
@@ -51,9 +54,13 @@ public class PersistenciaFachada implements IPersistenciaFachada {
         return clientesBO.buscarClientes();
     }
 
+    public Cliente buscarClientePorCodigo(String codigo) {
+        return clientesBO.buscarClientePorCodigo(codigo);
+    }
+
     @Override
     public boolean registrarAgente(Agente agente) {
-         return agentesBO.registrarAgente(agente);
+        return agentesBO.registrarAgente(agente);
     }
 
     @Override
@@ -63,22 +70,41 @@ public class PersistenciaFachada implements IPersistenciaFachada {
 
     @Override
     public boolean registrarCasting(Casting casting) {
-         return castingsBO.registrarCasting(casting);
+        return castingsBO.registrarCasting(casting);
     }
 
     @Override
-    public boolean buscarCastingPorCodigo(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Casting buscarCastingPorCodigo(String codigo) {
+        return castingsBO.buscarCastingPorCodigo(codigo);
     }
     
     @Override
-    public boolean actualizarCasting(Casting casting){
+    public List<Casting> buscarCastingPorNombre(String nombre) {
+        return castingsBO.buscarCastingPorNombre(nombre);
+    }
+    
+    @Override
+    public List<Casting> buscarCastingPorFecha(Date fecha){
+        return castingsBO.buscarCastingPorFecha(fecha);
+    }
+
+    @Override
+    public boolean actualizarCasting(Casting casting) {
         return castingsBO.actualizarCasting(casting);
     }
-    
+
     @Override
-    public List<Casting> buscarCastings(){
+    public List<Casting> buscarCastings() {
         return castingsBO.buscarCastings();
     }
 
+    @Override
+    public boolean registrarUsuario(Usuario usuario) {
+        return usuariosBO.registrarUsuario(usuario);
+    }
+
+    @Override
+    public List<Usuario> buscarUsuarios() {
+        return usuariosBO.buscarUsuarios();
+    }
 }

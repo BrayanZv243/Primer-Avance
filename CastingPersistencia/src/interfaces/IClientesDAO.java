@@ -9,7 +9,6 @@ package interfaces;
 
 import entidades.Cliente;
 import java.util.List;
-import persistencia.ConexionBD;
 
 /**
  *
@@ -19,6 +18,5 @@ public interface IClientesDAO {
     
     public boolean registrarCliente(Cliente cliente);
     public List<Cliente> buscarClientes();
-    public boolean eliminarCliente(String codigo);
-    public boolean actualizarCliente(Cliente cliente);
+    public Cliente buscarClientePorCodigo(String codigo);
 }

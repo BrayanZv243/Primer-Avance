@@ -10,10 +10,12 @@ import interfaces.IAgentesDAO;
 import interfaces.ICastingsDAO;
 import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
+import interfaces.IUsuariosDAO;
 import persistencia.AgentesDAO;
 import persistencia.CastingsDAO;
 import persistencia.ClientesDAO;
 import persistencia.ConexionBD;
+import persistencia.UsuariosDAO;
 
 /**
  * 
@@ -35,4 +37,7 @@ public class DAOSFactory {
         return new CastingsDAO(conexionBD);
     }
     
+    public static IUsuariosDAO crearUsuariosDAO(){
+        return new UsuariosDAO(conexionBD);
+    }
 }

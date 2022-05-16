@@ -34,7 +34,6 @@ import negocio.PersistenciaFachada;
 public class DlgRegistrarCasting extends javax.swing.JDialog {
 
     ZoneId defaultZoneId = ZoneId.systemDefault();
-    ArrayList<Perfil> perfiles = new ArrayList<>();
     DefaultComboBoxModel listaClientes;
     DefaultComboBoxModel listaAgentes;
     IPersistenciaFachada persistenciaFachada;
@@ -301,13 +300,8 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
     private void btnSeleccionarModalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarModalidadActionPerformed
         CastingPresencial cp = DlgSeleccionarModalidad.getCastingPresencial();
         CastingOnline co = DlgSeleccionarModalidad.getCastingOnline();
-        if (cp != null) {
-            dlgModalidad = new DlgSeleccionarModalidad(cp, null);
-        } else if (co != null) {
-            dlgModalidad = new DlgSeleccionarModalidad(null, co);
-        } else {
-            new DlgSeleccionarModalidad(cp, co);
-        }
+
+        dlgModalidad = new DlgSeleccionarModalidad(cp, co);
 
 
     }//GEN-LAST:event_btnSeleccionarModalidadActionPerformed
@@ -322,6 +316,7 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         String descripcion = txtDescripcion.getText();
 
         String stringCosto = txtCosto.getText();
+        
         float costo = Float.valueOf(stringCosto);
 
         boolean aprobado = (comboBoxAprobado.getSelectedItem().toString().equals("Aprobado"));
@@ -329,7 +324,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
         Agente agente = (Agente) comboBoxAgentes.getSelectedItem();
         CastingPresencial cp = dlgModalidad.getCastingPresencial();
         CastingOnline co = dlgModalidad.getCastingOnline();
-        perfiles = dlgPerfil.getPerfil();
 
         try {
             if (cp.getSala().getNombre() != null) {
@@ -337,36 +331,43 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
                         fechaContrato, fechaHoraInicio, fechaHoraFin, cp,
                         cliente, agente, fase);
 
-                persistenciaFachada.registrarCasting(casting);
-                JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
-                        "Error", JOptionPane.INFORMATION_MESSAGE);
+                if (persistenciaFachada.registrarCasting(casting)) {
+                    JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
+                            "Casting", JOptionPane.INFORMATION_MESSAGE);
 
-                fase = new Fase();
-                perfiles = new ArrayList<>();
-                cp = new CastingPresencial();
-                dispose();
+                    fase = new Fase();
+                    cp = new CastingPresencial();
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ya existe el casting ",
+                            "Casting", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             }
         } catch (NullPointerException e) {
             try {
                 if (co.getEnlace() != null) {
                     Casting casting = new Casting(aprobado, costo, codigo, nombre, descripcion,
-                            fechaContrato, fechaHoraInicio, fechaHoraFin, co, 
+                            fechaContrato, fechaHoraInicio, fechaHoraFin, co,
                             cliente, agente, fase);
 
-                    persistenciaFachada.registrarCasting(casting);
-                    JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
-                            "Error", JOptionPane.INFORMATION_MESSAGE);
-                    fase = new Fase();
-                    perfiles = new ArrayList<>();
-                    co = new CastingOnline();
-                    dispose();
+                    if (persistenciaFachada.registrarCasting(casting)) {
+                        JOptionPane.showMessageDialog(null, "Casting Guardado con Éxito.",
+                                "Casting", JOptionPane.INFORMATION_MESSAGE);
+                        fase = new Fase();
+                        co = new CastingOnline();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ya existe el casting ",
+                                "Casting", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Campos vacíos o inválidos, verifiquelos e intentelo de nuevo.",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado. "+ex,
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado. " + ex,
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -385,11 +386,6 @@ public class DlgRegistrarCasting extends javax.swing.JDialog {
             return false;
         }
 
-        if (perfiles.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Llene el perfil del casting!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
         fase = DlgRegistrarFase.getFase();
         if (fase.getFechaInicio() == null) {
             JOptionPane.showMessageDialog(null, "Llene la fase del casting!",

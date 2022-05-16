@@ -14,7 +14,6 @@ import entidades.Direccion;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import entidades.Persona;
 import interfaces.IPersistenciaFachada;
 import negocio.PersistenciaFachada;
 
@@ -27,7 +26,8 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
     Direccion direccion = new Direccion();
     Contacto contacto = new Contacto();
     IPersistenciaFachada persistencia;
-
+    int operacion;
+    
     DlgDireccion dlgDireccion;
     DlgRegistrarContacto dlgContacto;
 
@@ -39,8 +39,48 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
+        operacion = 0;
     }
 
+    public DlgRegistrarCliente(Cliente cliente) {
+        initComponents();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        this.operacion = 1;
+        txtCodigo.setText(cliente.getCodigo());
+        txtCorreo.setText(cliente.getEmail());
+        txtNombre.setText(cliente.getNombre());
+        txtTelefono.setText(cliente.getTelefono());
+
+        switch (cliente.getEmpresa().toString()) {
+            case "MODA":
+                comboBoxTipoEmpresa.setSelectedIndex(0);
+                break;
+            case "PUBLICIDAD":
+                comboBoxTipoEmpresa.setSelectedIndex(1);
+                break;
+            default:
+                comboBoxTipoEmpresa.setSelectedIndex(2);
+                break;
+        }
+
+        
+        direccion = cliente.getDireccion();
+        contacto = cliente.getContacto();
+
+        desactivarCampos();
+    }
+
+    private void desactivarCampos(){
+        txtCodigo.setEditable(false);
+        txtCorreo.setEditable(false);
+        txtNombre.setEditable(false);
+        txtTelefono.setEditable(false);
+        btnGuardar.setEnabled(false);
+        btnLimpiar.setEnabled(false);
+        comboBoxTipoEmpresa.setEnabled(false);
+        btnCancelar.setText("Salir");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -253,11 +293,11 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        new DlgDireccion(direccion);
+        new DlgDireccion(direccion, operacion);
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
     private void btnRegistrarContacoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarContacoActionPerformed
-        dlgContacto = new DlgRegistrarContacto(contacto);
+        dlgContacto = new DlgRegistrarContacto(contacto,operacion);
 
     }//GEN-LAST:event_btnRegistrarContacoActionPerformed
 
@@ -317,9 +357,13 @@ public class DlgRegistrarCliente extends javax.swing.JDialog {
             contacto = (Contacto) dlgContacto.getContacto();
 
             Cliente cliente = new Cliente(nombre, telefono, codigo, correo, empresa, contacto, direccion);
-            if(persistencia.registrarCliente(cliente)) JOptionPane.showMessageDialog(null, "Cliente guardado con éxito");
-            else JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar el cliente.");
-            dispose();
+            if (persistencia.registrarCliente(cliente)) {
+                JOptionPane.showMessageDialog(null, "Cliente guardado con éxito");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "El Cliente ya existe");
+            }
+
         }
 
     }//GEN-LAST:event_btnGuardarActionPerformed

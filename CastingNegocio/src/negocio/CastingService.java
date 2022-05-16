@@ -9,8 +9,8 @@ package negocio;
 import entidades.Casting;
 import factory.DAOSFactory;
 import interfaces.ICastingsDAO;
-import persistencia.CastingsDAO;
 import interfaces.ICastingsService;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ public class CastingService implements ICastingsService{
 
     @Override
     public boolean registrarCasting(Casting casting) {
-        if(validar()){
+        if(validar(casting.getCodigo())){
             castingDAO.registrarCasting(casting);
             return true;
         } else {
@@ -33,8 +33,18 @@ public class CastingService implements ICastingsService{
     }
 
     @Override
-    public boolean buscarCastingPorCodigo(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Casting buscarCastingPorCodigo(String codigo) {
+        return castingDAO.buscarCastingPorCodigo(codigo);
+    }
+    
+    @Override
+    public List<Casting> buscarCastingPorNombre(String nombre) {
+        return castingDAO.buscarCastingPorNombre(nombre);
+    }
+    
+    @Override
+    public List<Casting> buscarCastingPorFecha(Date fecha){
+        return castingDAO.buscarCastingPorFecha(fecha);
     }
 
     @Override
@@ -48,8 +58,10 @@ public class CastingService implements ICastingsService{
     }
 
     @Override
-    public boolean validar() {
-        return true;
+    public boolean validar(String codigo) {
+       Casting casting = castingDAO.buscarCastingPorCodigo(codigo);
+        
+        return casting == null;
     }
     
 }

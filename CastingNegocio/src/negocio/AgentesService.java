@@ -23,10 +23,10 @@ public class AgentesService implements IAgentesService{
     
     @Override
     public boolean registrarAgente(Agente agente) {
-        if(validar()){
+       if(validar(agente.getNumEmpleado())){
             agentesDAO.registrarAgente(agente);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -47,8 +47,11 @@ public class AgentesService implements IAgentesService{
     }
 
     @Override
-    public boolean validar() {
-        return true;
+    public boolean validar(int codigo) {
+        Agente agente = agentesDAO.buscarAgentePorCodigo(codigo);
+        
+        return agente == null;
+
     }
 
 }

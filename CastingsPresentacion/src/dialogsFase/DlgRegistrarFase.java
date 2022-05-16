@@ -205,6 +205,8 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             return;
         }
         fase = new Fase(fechaInicio, fechaFin, candidato, prueba);
+        JOptionPane.showMessageDialog(null, "Fase guardada correctamente",
+                        "Fase", JOptionPane.INFORMATION_MESSAGE);
         dispose();
 
     }//GEN-LAST:event_btnGuardarActionPerformed

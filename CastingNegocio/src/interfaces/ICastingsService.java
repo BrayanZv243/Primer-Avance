@@ -6,6 +6,7 @@
 package interfaces;
 
 import entidades.Casting;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,9 +16,11 @@ import java.util.List;
 public interface ICastingsService {
     
     public boolean registrarCasting(Casting casting);
-    public boolean buscarCastingPorCodigo(String codigo);
+    public Casting buscarCastingPorCodigo(String codigo);
+    public List<Casting> buscarCastingPorNombre(String nombre);
+    public List<Casting> buscarCastingPorFecha(Date fecha);
     public List<Casting> buscarCastings();
     public boolean actualizarCasting(Casting casting);
-    public boolean validar();
+    public boolean validar(String codigo);
     
 }

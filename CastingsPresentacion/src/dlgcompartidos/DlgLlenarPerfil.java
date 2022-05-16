@@ -377,15 +377,18 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             Casting casting = (Casting) comboBoxCastings.getSelectedItem();
             casting.setPerfiles(perfiles);
             if (persistenciaFachada.actualizarCasting(casting)) {
-                JOptionPane.showMessageDialog(null, "Perfil guardado con éxito al casting",
+                JOptionPane.showMessageDialog(null, "Perfil(es) guardado con éxito al casting",
                         "Perfil", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar el perfil",
                         "Perfil", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                return;
             }
 
         }
-
+        
+        
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -505,7 +508,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             modelPerfil2.removeRow(i);
         }
 
-        Object rowDataPerfiles1[] = new Object[6];
+        Object rowDataPerfiles1[] = new Object[4];
         Object rowDataPerfiles2[] = new Object[5];
         if (perfiles != null) {
             for (int i = 0; i < perfiles.size(); i++) {

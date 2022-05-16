@@ -18,6 +18,6 @@ public interface IAgentesService {
     public List<Agente> buscarAgentes();
     public boolean eliminarAgente(String codigo);
     public boolean actualizarAgente(Agente agente);
-    public boolean validar();
+    public boolean validar(int codigo);
     
 }

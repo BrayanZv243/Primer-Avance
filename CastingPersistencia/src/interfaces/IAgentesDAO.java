@@ -9,6 +9,7 @@ package interfaces;
 
 
 import entidades.Agente;
+
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public interface IAgentesDAO {
     
     public boolean registrarAgente(Agente agente);
     public List<Agente> buscarAgentes();
-    public boolean eliminarAgente(String codigo);
-    public boolean actualizarAgente(Agente agente);
-    
+   
+      public Agente buscarAgentePorCodigo(int codigo);
+
 }

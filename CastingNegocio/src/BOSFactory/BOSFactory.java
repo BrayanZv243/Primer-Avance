@@ -5,14 +5,14 @@
  */
 package BOSFactory;
 
-import interfaces.IAdministradorService;
 import interfaces.IAgentesService;
 import interfaces.ICastingsService;
 import interfaces.IClientesService;
-import negocio.AdministradorService;
+import interfaces.IUsuarioService;
 import negocio.AgentesService;
 import negocio.CastingService;
 import negocio.ClientesService;
+import negocio.UsuarioService;
 
 /**
  *
@@ -32,8 +32,8 @@ public class BOSFactory {
         return new CastingService();
     }
 
-    public static IAdministradorService crearAdministradorService() {
-        return new AdministradorService();
+    public static IUsuarioService crearUsuariosService(){
+        return new UsuarioService();
     }
 
 }

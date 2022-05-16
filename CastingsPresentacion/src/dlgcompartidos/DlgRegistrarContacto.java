@@ -22,7 +22,7 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
     Persona persona;
     Contacto contactoRepresentante;
     DlgDireccion dlgDireccion;
-
+    int operacion;
     DlgRegistrarCandidato dlg;
 
     /**
@@ -37,9 +37,33 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setVisible(true);
         this.persona = persona;
+        operacion = 0;
         llenarCampos();
     }
+    
+    public DlgRegistrarContacto(Persona persona, int operacion) {
 
+        initComponents();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        this.persona = persona;
+        this.operacion = 1;
+        llenarCampos();
+        if(operacion == 1){
+            desactivarCampos();
+        }
+        
+    }
+
+    private void desactivarCampos(){
+        txtCurp.setEditable(false);
+        txtNombre.setEditable(false);
+        txtRFC.setEditable(false);
+        txtTelefono.setEditable(false);
+        btnLimpiar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnCancelar.setText("Salir");
+    }
     
     private void llenarCampos(){
         txtCurp.setText(persona.getCurp());
@@ -204,10 +228,10 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
         if (persona.getDireccion() == null) {
-            new DlgDireccion(direccion);
+            new DlgDireccion(direccion,operacion);
         } else {
             direccion = persona.getDireccion();
-            new DlgDireccion(direccion);
+            new DlgDireccion(direccion,operacion);
         }
 
         // dlgDireccion = new DlgDireccion(direccion);

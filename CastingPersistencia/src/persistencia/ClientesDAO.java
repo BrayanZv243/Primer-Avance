@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package persistencia;
 
 import com.mongodb.client.MongoCollection;
@@ -13,27 +12,26 @@ import interfaces.IClientesDAO;
 import interfaces.IConexionBD;
 import java.util.ArrayList;
 import java.util.List;
-
-
+import org.bson.Document;
 
 /**
- * 
+ *
  * @author Sammy Guergachi <sguergachi at gmail.com>
  */
-public class ClientesDAO implements IClientesDAO{
+public class ClientesDAO implements IClientesDAO {
 
     private IConexionBD conexion;
     private MongoDatabase baseDatos;
 
     public ClientesDAO(IConexionBD conexion) {
         this.conexion = conexion;
-        this.baseDatos = this.conexion.obtenerConexion(); 
+        this.baseDatos = this.conexion.obtenerConexion();
     }
-    
-    private MongoCollection<Cliente> getColeccion(){
+
+    private MongoCollection<Cliente> getColeccion() {
         return baseDatos.getCollection("clientes", Cliente.class);
     }
-    
+
     @Override
     public boolean registrarCliente(Cliente cliente) {
         this.getColeccion().insertOne(cliente);
@@ -43,7 +41,7 @@ public class ClientesDAO implements IClientesDAO{
     @Override
     public List<Cliente> buscarClientes() {
         List<Cliente> clientes = baseDatos.getCollection("clientes", Cliente.class).find().into(new ArrayList());
-        
+
         if (clientes.isEmpty()) {
             return null;
         }
@@ -51,13 +49,14 @@ public class ClientesDAO implements IClientesDAO{
     }
 
     @Override
-    public boolean eliminarCliente(String codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Cliente buscarClientePorCodigo(String codigo) {
+        List<Cliente> cliente = baseDatos.getCollection("clientes", Cliente.class).find(new Document()
+                .append("codigo", codigo)).into(new ArrayList());
+        
+        if (cliente.isEmpty()) {
+            return null;
+        }
+        return cliente.get(0);
     }
 
-    @Override
-    public boolean actualizarCliente(Cliente cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

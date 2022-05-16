@@ -29,6 +29,31 @@ public class DlgDireccion extends javax.swing.JDialog {
         this.direccion = direccion;
         llenarCampos();
     }
+    public DlgDireccion(Direccion direccion, int operacion) {
+        initComponents();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        this.direccion = direccion;
+        llenarCampos();
+        if(operacion == 1){
+            desactivarCampos();
+        }
+        
+    }
+    
+    private void desactivarCampos(){
+        txtCP.setEditable(false);
+        txtCalle.setEditable(false);
+        txtColonia.setEditable(false);
+        txtEntreCalles.setEditable(false);
+        txtNumExterior.setEditable(false);
+        txtNumInterior.setEditable(false);
+        txtReferencias.setEditable(false);
+        btnLimpiar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnCancelar.setText("Salir");
+    }
+    
     
     private void llenarCampos(){
         txtCalle.setText(direccion.getCalle());
