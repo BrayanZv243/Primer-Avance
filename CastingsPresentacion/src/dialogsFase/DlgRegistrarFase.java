@@ -311,7 +311,7 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
             return;
 
         }
-        new DlgRegistrarPrueba(new Prueba(), operacion);
+        new DlgRegistrarPrueba(prueba, operacion);
 
     }//GEN-LAST:event_btnPruebaActionPerformed
 
@@ -323,11 +323,11 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
 
         if (tblFases.getSelectedRow() != -1) {
             candidato = fases.get(tblFases.getSelectedRow()).getCandidato();
-            new DlgRegistrarCandidato(candidato, 1);
+            new DlgRegistrarCandidato(candidato, 1,fases);
 
             return;
         }
-        new DlgRegistrarCandidato(new Candidato(), operacion);
+        new DlgRegistrarCandidato(candidato, operacion,fases);
 
     }//GEN-LAST:event_btnRegistrarCandidatoActionPerformed
 
@@ -386,12 +386,19 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         }
 
         List<Casting> casting = persistencia.buscarCastings();
-        for (int i = 0; i < casting.size(); i++) {
-            if (casting.get(i).getFase().get(i).getFechaInicio().equals(fechaInicio)) {
-                JOptionPane.showMessageDialog(null, "Ya existe una fase en la fecha especificada!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
+
+        if (casting != null) {
+            for (int i = 0; i < casting.size(); i++) {
+                if (casting.get(i).getFase().get(i).getFechaInicio().equals(fechaInicio)) {
+                    JOptionPane.showMessageDialog(null, "Ya existe una fase en la fecha especificada!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+
             }
+        }
+
+        for (int i = 0; i < fases.size(); i++) {
             if (fases.get(i).getFechaInicio().equals(fechaInicio)) {
                 JOptionPane.showMessageDialog(null, "Ya existe una fase en la fecha especificada!",
                         "Error", JOptionPane.ERROR_MESSAGE);

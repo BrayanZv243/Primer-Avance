@@ -20,7 +20,7 @@ public class Casting {
     Date fechaHoraFin;
     CastingOnline castingOnline;
     CastingPresencial castingPresencial;
-    ArrayList<Perfil> perfiles;
+    ArrayList<Perfil> perfiles = new ArrayList<>();
     Cliente cliente;
     Agente agente;
     ArrayList<Fase> fase;
@@ -147,7 +147,9 @@ public class Casting {
     }
 
     public void setPerfiles(ArrayList<Perfil> perfiles) {
-        this.perfiles = perfiles;
+        for (int i = 0; i < perfiles.size(); i++) {
+            this.perfiles.add(perfiles.get(i));
+        }
     }
 
     public Cliente getCliente() {
@@ -176,7 +178,7 @@ public class Casting {
 
     @Override
     public String toString() {
-        String toString = "-Cliente: " + nombre + "  -Agente: " + agente.getNombre();
+        String toString = "-Casting: "+codigo+" -Cliente: " + cliente.getNombre() + "  -Agente: " + agente.getNombre();
         String resultado = castingPresencial != null ? "  -Tipo: Presencial" : "  -Tipo: Online";
 
         toString += resultado;

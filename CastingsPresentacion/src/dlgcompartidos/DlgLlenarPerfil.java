@@ -10,9 +10,11 @@ import Enums.Sexo;
 import entidades.Perfil;
 import Enums.EPerfil;
 import entidades.Casting;
+import entidades.Fase;
 import interfaces.IPersistenciaFachada;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -421,6 +423,7 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             if (persistenciaFachada.actualizarCasting(casting)) {
                 JOptionPane.showMessageDialog(null, "Perfil(es) guardado con éxito al casting",
                         "Perfil", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Ocurrió un error al guardar el perfil",
                         "Perfil", JOptionPane.INFORMATION_MESSAGE);
@@ -722,7 +725,43 @@ public class DlgLlenarPerfil extends javax.swing.JDialog {
             return false;
         }
 
-        
+        List<Casting> castings = persistenciaFachada.buscarCastings();
+        List<Fase> fases = new ArrayList<>();
+
+        if (castings != null) {
+            for (int i = 0; i < castings.size(); i++) {
+                for (int j = 0; j < castings.get(i).getFase().size(); j++) {
+                    fases.add(castings.get(i).getFase().get(j));
+                }
+
+            }
+        }
+
+        for (int i = 0; i < fases.size(); i++) {
+            ArrayList<Perfil> perfiles = fases.get(i).getCandidato().getPerfiles();
+            for (int j = 0; j < perfiles.size(); j++) {
+                if (perfiles.get(j).getCodigo().equals(txtCodigo.getText())) {
+                    JOptionPane.showMessageDialog(null, "El perfil ya existe!");
+                    return false;
+                }
+            }
+        }
+
+        if (castings != null) {
+            for (int i = 0; i < castings.size(); i++) {
+                ArrayList<Perfil> perfilesCasting = castings.get(i).getPerfiles();
+                if (perfilesCasting != null) {
+                    for (int j = 0; j < perfilesCasting.size(); j++) {
+                        if (perfilesCasting.get(j).getCodigo().equals(txtCodigo.getText())) {
+                            JOptionPane.showMessageDialog(null, "El perfil ya existe!");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+        }
+
         for (int i = 0; i < perfiles.size(); i++) {
             if (perfiles.get(i).getCodigo().equals(txtCodigo.getText())) {
                 JOptionPane.showMessageDialog(null, "El perfil ya existe!");

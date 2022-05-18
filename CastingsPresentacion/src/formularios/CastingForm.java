@@ -15,6 +15,7 @@ import java.util.List;
 import dlgcompartidos.DlgLlenarPerfil;
 import entidades.Agente;
 import entidades.Casting;
+import entidades.Perfil;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -25,7 +26,6 @@ public class CastingForm extends javax.swing.JFrame {
 
     Conversiones conversiones;
     IPersistenciaFachada persistencia;
-    ArrayList perfiles;
 
     List<Cliente> clientes;
     List<Agente> agentes;
@@ -33,7 +33,6 @@ public class CastingForm extends javax.swing.JFrame {
     public CastingForm() {
         persistencia = PersistenciaFachada.getInstance();
         conversiones = Conversiones.getInstance();
-        perfiles = new ArrayList<>();
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -187,7 +186,7 @@ public class CastingForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Necesita agregar un casting para agregarle un Perfil!",
                     "Perfil", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            new DlgLlenarPerfil(perfiles, castings);
+            new DlgLlenarPerfil(new ArrayList<Perfil>(), castings);
         }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
