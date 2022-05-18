@@ -42,7 +42,7 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         this.prueba = prueba;
         llenarCampos();
     }
-    
+
     public DlgRegistrarPrueba(Prueba prueba, int operacion) {
         initComponents();
         setVisible(true);
@@ -50,15 +50,17 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         this.prueba = prueba;
         this.operacion = operacion;
         llenarCampos();
-        if(operacion == 1){
+        if (operacion == 1) {
             desactivarCampos();
         }
-        
-        
-        
+
+    }
+    
+    public static void setPrueba(){
+        prueba = new Prueba();
     }
 
-    private void llenarCampos(){
+    private void llenarCampos() {
         if (prueba.getFecha() != null) {
             LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(prueba.getFecha()));
             dateFecha.setDate(localDate);
@@ -74,9 +76,8 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
             this.prueba.getSala().setDireccion(new Direccion());
         }
     }
-    
-    
-    private void desactivarCampos(){
+
+    private void desactivarCampos() {
         dateFecha.setEnabled(false);
         aprobadoCheckBox.setEnabled(false);
         txtNombreSala.setEditable(false);
@@ -86,6 +87,7 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         btnCancelar.setText("Salir");
         btnRegistrarDireccion.setText("Ver Dirección Sala...");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -245,9 +247,9 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
         prueba.getSala().setNombre(txtNombreSala.getText());
         prueba.getSala().setDescripcion(txtDescripcionSala.getText());
         prueba.getSala().setDireccion(direccion);
-        
+
         JOptionPane.showMessageDialog(null, "Prueba registrada correctamente",
-                        "Error", JOptionPane.INFORMATION_MESSAGE);
+                "Error", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -263,7 +265,7 @@ public class DlgRegistrarPrueba extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDireccionActionPerformed
-        new DlgDireccion(direccion,operacion);
+        new DlgDireccion(direccion, operacion);
     }//GEN-LAST:event_btnRegistrarDireccionActionPerformed
 
     private void limpiar() {

@@ -110,8 +110,6 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         btnLimpiar.setEnabled(false);
         btnRegistrarCandidato.setText("Ver Candidato...");
         btnPrueba.setText("Ver Prueba...");
-        btnRegistrarCandidato.setEnabled(false);
-        btnPrueba.setEnabled(false);
         btnCancelar.setText("Salir");
         btnEliminarFila.setEnabled(false);
         btnInsertarFase.setEnabled(false);
@@ -305,12 +303,22 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPruebaActionPerformed
+        
+        if(btnPrueba.getText().equals("Ver Prueba...")){
+            if (tblFases.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione una fila!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
         if (tblFases.getSelectedRow() != -1) {
             prueba = fases.get(tblFases.getSelectedRow()).getPrueba();
             new DlgRegistrarPrueba(prueba, 1);
             return;
-
         }
+        
+        prueba = DlgRegistrarPrueba.getPrueba();
         new DlgRegistrarPrueba(prueba, operacion);
 
     }//GEN-LAST:event_btnPruebaActionPerformed
@@ -321,13 +329,21 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
 
     private void btnRegistrarCandidatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCandidatoActionPerformed
 
+        if(btnRegistrarCandidato.getText().equals("Ver Candidato...")){
+            if (tblFases.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione una fila!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
         if (tblFases.getSelectedRow() != -1) {
             candidato = fases.get(tblFases.getSelectedRow()).getCandidato();
-            new DlgRegistrarCandidato(candidato, 1,fases);
+            new DlgRegistrarCandidato(candidato, 1, fases);
 
             return;
         }
-        new DlgRegistrarCandidato(candidato, operacion,fases);
+        new DlgRegistrarCandidato(candidato, operacion, fases);
 
     }//GEN-LAST:event_btnRegistrarCandidatoActionPerformed
 
@@ -432,8 +448,10 @@ public class DlgRegistrarFase extends javax.swing.JDialog {
         limpiar();
         JOptionPane.showMessageDialog(null, "Fase Insertada con éxito!",
                 "Fases", JOptionPane.INFORMATION_MESSAGE);
+        DlgRegistrarPrueba.setPrueba();
         candidato = new Candidato();
         prueba = new Prueba();
+        
     }//GEN-LAST:event_btnInsertarFaseActionPerformed
 
     private void btnEliminarFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarFilaActionPerformed

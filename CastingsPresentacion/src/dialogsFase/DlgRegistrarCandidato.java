@@ -107,7 +107,7 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         txtNombre.setText(candidato.getNombre());
         txtRFC.setText(candidato.getRfc());
         txtTelefono.setText(candidato.getTelefono());
-        comboBoxCandidato.setSelectedItem(this);
+        
 
         if (candidato.getFechaNacimiento() != null) {
             LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(candidato.getFechaNacimiento()));
@@ -140,6 +140,10 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         if (candidato instanceof Adulto) {
             comboBoxCandidato.setSelectedIndex(0);
         } else if (candidato instanceof Niño) {
+            comboBoxCandidato.setSelectedIndex(1);
+        }
+        
+        if(txtRFC.getText().equals("")){
             comboBoxCandidato.setSelectedIndex(1);
         }
 
@@ -610,15 +614,25 @@ public class DlgRegistrarCandidato extends javax.swing.JDialog {
         }
         return candidato;
     }
+    
+    
 
     public boolean validacion() {
-        
-        if(txtNombre.getText().equals("") || txtTelefono.getText().equals("") || txtCurp.getText().equals("")
-                || txtRFC.getText().equals("") || txtCodigo.getText().equals("")){
-            JOptionPane.showMessageDialog(null, "Campos vacíos, reviselos e intentelo de nuevo!");
-            return false;
+
+        if (comboBoxCandidato.getSelectedIndex() == 0) {
+            if (txtNombre.getText().equals("") || txtTelefono.getText().equals("") || txtCurp.getText().equals("")
+                    || txtRFC.getText().equals("") || txtCodigo.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Campos vacíos, reviselos e intentelo de nuevo!");
+                return false;
+            }
+        } else {
+            if (txtNombre.getText().equals("") || txtTelefono.getText().equals("") || txtCurp.getText().equals("")
+                    || txtCodigo.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Campos vacíos, reviselos e intentelo de nuevo!");
+                return false;
+            }
         }
-        
+
         if (direccion.getCalle() == null || direccion.getCodigoPostal() == null
                 || direccion.getColonia() == null || direccion.getEntreCalles() == null
                 || direccion.getNumExterior() == null || direccion.getNumInterior() == null

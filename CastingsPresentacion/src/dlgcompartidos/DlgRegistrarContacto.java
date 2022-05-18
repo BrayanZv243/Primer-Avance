@@ -98,7 +98,7 @@ public class DlgRegistrarContacto extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar Contacto");
 
-        jLabel1.setText("Nombre;");
+        jLabel1.setText("Nombre:");
 
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
